@@ -1,0 +1,87 @@
+contextClassSkel(packageName, grammarName, parserName, className, ruleName)::=<<
+
+package <packageName>;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import com.proteus.<grammarName>.PopulateExtendedContextVisitor;
+import com.proteus.<grammarName>.<parserName>.<className>;
+
+public class <className>Ext extends AbstractBaseExt{
+
+	public <className>Ext(<className> ctx) {
+		addToContexts(ctx);
+		parent = ctx;
+	}
+	
+	@Override
+	public <className> getContext(){
+		return (<className>)contexts.get(contexts.size()-1);
+	}
+	
+	@Override
+	public ParserRuleContext getContext(String str){
+		return new PopulateExtendedContextVisitor().visit(getPrimeParser(str).<ruleName>());
+	}
+	
+	@Override
+	public void setContext(ParserRuleContext ctx){
+		if(ctx != null){
+			if(ctx instanceof <className>){
+				addToContexts((<className>) ctx);
+			} else {
+				throw new ClassCastException(ctx.getClass().getSimpleName() + " cannot be cased to "+<className>.class.getName());
+			}
+		} else {
+			addToContexts(null);
+		}
+	}
+}
+>>
+
+contextAltParentClassSkel(className)::=<<
+package com.forge.parser.ext;
+
+public abstract class <className>Ext extends AbstractBaseExt{
+
+}
+>>
+
+contextAltClassSkel(className,parentClassName,ruleName)::=<<
+
+package com.forge.parser.ext;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import com.forge.parser.PopulateExtendedContextVisitor;
+import com.forge.parser.gen.ForgeParser.<className>;
+
+public class <className>Ext extends <parentClassName>Ext{
+
+	public <className>Ext(<className> ctx) {
+		addToContexts(ctx);
+		parent = ctx;
+	}
+	
+	@Override
+	public <className> getContext(){
+		return (<className>)contexts.get(contexts.size()-1);
+	}
+	
+	@Override
+	public ParserRuleContext getContext(String str){
+		return new PopulateExtendedContextVisitor().visit(getPrimeParser(str).<ruleName>());
+	}
+	
+	@Override
+	public void setContext(ParserRuleContext ctx){
+		if(ctx != null){
+			if(ctx instanceof <className>){
+				addToContexts((<className>) ctx);
+			} else {
+				throw new ClassCastException(ctx.getClass().getSimpleName() + " cannot be cased to "+<classname>.class.getName());
+			}
+		} else {
+			addToContexts(null);
+		}
+	}
+}
+>>

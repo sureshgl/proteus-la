@@ -1,0 +1,148 @@
+contextClassSkel(packageName, grammarName, parserName, lexerName, className,ruleName)::=<<
+
+package <packageName>;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+
+import com.proteus.framework.app.*;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>;
+import com.proteus.<grammarName>.ANTLRv4.<lexerName>;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
+
+public class <className>Ext extends AbstractBaseExtendedContext{
+
+	public <className>Ext(<className> ctx) {
+		super("<grammarName>", new <parserName>(null), new <lexerName>(null), new <parserName>ExtendedContextVisitor());
+		addToContexts(ctx);
+		parent = ctx;
+	}
+	
+  /*
+   * Return the conext associated with this extened context
+   */
+	@Override
+	public <className> getContext(){
+		return (<className>)contexts.get(contexts.size()-1);
+	}
+	
+  /*
+   * Create a context for the given string  with extended context populated in that
+   */
+	@Override
+	public ParserRuleContext getContext(String str){
+		return ((<parserName>)getParser(str)).<ruleName>();
+	}
+	
+	@Override
+	public void setContext(ParserRuleContext ctx){
+		if(ctx != null){
+			if(ctx instanceof <className>){
+				addToContexts((<className>) ctx);
+			} else {
+				throw new ClassCastException(ctx.getClass().getSimpleName() + " cannot be cased to "+<className>.class.getName());
+			}
+		} else {
+			addToContexts(null);
+		}
+	}
+}
+>>
+
+contextAltParentClassSkel(packageName, grammarName, parserName, lexerName, className)::=<<
+package <packageName>;
+
+import com.proteus.framework.app.*;
+import org.antlr.v4.runtime.ParserRuleContext;
+import com.proteus.<grammarName>.ANTLRv4.<lexerName>;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
+
+public class <className>Ext extends AbstractBaseExtendedContext{
+
+	public <className>Ext(<className> ctx) {
+		super("<grammarName>", new <parserName>(null), new <lexerName>(null), new <parserName>ExtendedContextVisitor());
+		addToContexts(ctx);
+		parent = ctx;
+	}
+
+	@Override
+	public <className> getContext(){
+		throw new UnsupportedOperationException("Alt rule should not call the base class method");
+	}
+	
+	@Override
+	public ParserRuleContext getContext(String str){
+		throw new UnsupportedOperationException("Alt rule should not call the base class method");
+	}
+	
+	@Override
+	public void setContext(ParserRuleContext ctx){
+		throw new UnsupportedOperationException("Alt rule should not call the base class method");
+	}
+
+}
+>>
+
+contextAltClassSkel(packageName, grammarName, parserName, className, parentClassName, ruleName)::=<<
+
+package <packageName>;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
+
+public class <className>Ext extends <parentClassName>Ext{
+
+	public <className>Ext(<className> ctx) {
+		super(ctx);
+	}
+	
+	@Override
+	public <className> getContext(){
+		return (<className>)contexts.get(contexts.size()-1);
+	}
+	
+	@Override
+	public ParserRuleContext getContext(String str){
+		return ((<parserName>)getParser(str)).<ruleName>();
+	}
+	
+	@Override
+	public void setContext(ParserRuleContext ctx){
+		if(ctx != null){
+			if(ctx instanceof <className>){
+				addToContexts((<className>) ctx);
+			} else {
+				throw new ClassCastException(ctx.getClass().getSimpleName() + " cannot be cased to "+<className>.class.getName());
+			}
+		}
+		else {
+			addToContexts(null);
+		}
+	}
+}
+>>
+
+extendedContextClassVistor(packageName, grammarName, parserName, methods)::=<<
+package <packageName>;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import com.proteus.framework.app.*;
+import com.proteus.framework.IExtendedContextVisitor;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>BaseVisitor;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
+
+public class <parserName>ExtendedContextVisitor extends <parserName>BaseVisitor\<AbstractBaseExtendedContext> implements IExtendedContextVisitor {
+	<methods>
+}
+>>
+
+extendedContextClassVistorMethodSkel(ruleName, ruleContextName, parserName)::=<<
+
+@Override 
+public AbstractBaseExtendedContext visit<ruleName>(<parserName>.<ruleContextName> ctx) {
+	return ctx.extendedContext;
+}
+
+>>
