@@ -15,9 +15,11 @@ import org.stringtemplate.v4.STGroupFile;
 import com.proteus.framework.utils.FileUtils;
 
 import com.proteus.framework.GrammarFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ExtendedContextVisitorGenerator {
-
+	protected static final Logger logger = LoggerFactory.getLogger(ExtendedContextVisitorGenerator.class);
 	private String packageName;
 	private String grammarName;
 	private String parserName;
@@ -27,9 +29,8 @@ public class ExtendedContextVisitorGenerator {
 	private final String extendedContextClassVistorMethodSkel = "extendedContextClassVistorMethodSkel";
 	private final String extendedContextClassVistor = "extendedContextClassVistor";
 
-
-	public ExtendedContextVisitorGenerator(String grammarFilePath,String templateFilePath, String directoryLocation, 
-																				String packageName, String grammarName, String parserName){
+	public ExtendedContextVisitorGenerator(String grammarFilePath, String templateFilePath, String directoryLocation,
+			String packageName, String grammarName, String parserName) {
 		this.grammarFilePath = grammarFilePath;
 		this.templateFilePath = templateFilePath;
 		this.directoryLocation = directoryLocation;
@@ -43,17 +44,30 @@ public class ExtendedContextVisitorGenerator {
 		StringBuilder sb = new StringBuilder();
 		GrammarFile rulesOfGrammarFile = new GrammarFile(grammarFilePath);
 		STGroupFile stgf = new STGroupFile(templateFilePath);
+		ST st = stgf.getInstanceOf(extendedContextClassVistorMethodSkel);
 		for (String name : rulesOfGrammarFile.getParserRules()) {
-			ST st = stgf.getInstanceOf(extendedContextClassVistorMethodSkel);
 			String ruleContextName = toContext(name);
 			st.add("parserName", parserName);
 			st.add("ruleName", name.substring(0,1).toUpperCase()+ name.substring(1));
 			st.add("ruleContextName", ruleContextName);
 			sb.append(st.render());
+			logger.info(name.substring(0,1).toUpperCase()+ name.substring(1) +":" + ruleContextName);
 			count++;
 		}
+		//altRules -> Alt rule name : main rule
+		Map<String, String> altRules = rulesOfGrammarFile.getAltRules();
+		for (String name : altRules.keySet()) {
+			String ruleContextName = toContext(name);
+			st.add("parserName", parserName);
+			st.add("ruleName", name.substring(0,1).toUpperCase()+ name.substring(1));
+			st.add("ruleContextName", ruleContextName);
+			sb.append(st.render());
+			logger.info(name.substring(0,1).toUpperCase()+ name.substring(1) +":" + ruleContextName);
+			count++;
+		}
+		logger.info("Total "+ count);
 
-		ST st = stgf.getInstanceOf(extendedContextClassVistor);
+		st = stgf.getInstanceOf(extendedContextClassVistor);
 		st.add("packageName", packageName);
 		st.add("grammarName", grammarName);
 		st.add("parserName", parserName);
@@ -69,24 +83,20 @@ public class ExtendedContextVisitorGenerator {
 		return sb.toString();
 	}
 
-
 	public static void main(String[] args) throws Exception {
 
-    if( args.length != 6 ){
-      throw new IllegalArgumentException("Usage : ContextClassGenerator <grammarFile> <templateFile> <directoryLocation>");
-    }
-    String grammarFilePath = args[0];
-    String templateFilePath = args[1];
-    String directoryLocation = args[2];
+		if (args.length != 6) {
+			throw new IllegalArgumentException(
+					"Usage : ContextClassGenerator <grammarFile> <templateFile> <directoryLocation>");
+		}
+		String grammarFilePath = args[0];
+		String templateFilePath = args[1];
+		String directoryLocation = args[2];
 		String packageName = args[3];
 		String grammarName = args[4];
 		String parserName = args[5];
-    ExtendedContextVisitorGenerator extendedContextVisitorGenerator 
-      = new ExtendedContextVisitorGenerator(grammarFilePath,templateFilePath,directoryLocation, packageName, grammarName, parserName);
+		ExtendedContextVisitorGenerator extendedContextVisitorGenerator = new ExtendedContextVisitorGenerator(
+				grammarFilePath, templateFilePath, directoryLocation, packageName, grammarName, parserName);
 		extendedContextVisitorGenerator.generate();
 	}
 }
-
-
-
-		
