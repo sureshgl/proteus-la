@@ -231,4 +231,20 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
+
+	//Use this step to initialize all the data structures in the AST.
+	public void Initalize()
+	{
+		ParserRuleContext ctx = getContext();
+		if(ctx != null && ctx.children != null && ctx.children.size()>0){
+			for(ParseTree childCtx : ctx.children){
+				if(!(childCtx instanceof TerminalNode)){
+					if(childCtx.getText().length() >0){
+						getExtendedContext(childCtx).Initalize();
+					}
+				}
+			}
+		}
+	}
+
 }

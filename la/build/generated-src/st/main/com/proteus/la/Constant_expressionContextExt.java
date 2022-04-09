@@ -29,4 +29,7 @@ public class Constant_expressionContextExt extends AbstractBaseExtendedContext{
 		throw new UnsupportedOperationException("Alt rule should not call the base class method");
 	}
 
+	public Long eval() throws Exception { 
+		throw new NumberFormatException(" Something very bad happened");
+	} 
 }

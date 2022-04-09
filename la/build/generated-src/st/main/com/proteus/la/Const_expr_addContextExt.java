@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
+import java.lang.Long;
+
 public class Const_expr_addContextExt extends Constant_expressionContextExt{
 
 	public Const_expr_addContextExt(Const_expr_addContext ctx) {
@@ -32,5 +34,13 @@ public class Const_expr_addContextExt extends Constant_expressionContextExt{
 		else {
 			addToContexts(null);
 		}
+	}
+
+	@Override 
+	public Long eval() throws Exception
+	{
+		Long lhs = getContext().constant_expression(0).extendedContext.eval();
+		Long rhs = getContext().constant_expression(0).extendedContext.eval();
+		return lhs + rhs;
 	}
 }

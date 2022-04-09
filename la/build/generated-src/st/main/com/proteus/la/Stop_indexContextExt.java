@@ -7,9 +7,9 @@ import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
-public class Group_definitionContextExt extends AbstractBaseExtendedContext{
+public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 
-	public Group_definitionContextExt(Group_definitionContext ctx) {
+	public Stop_indexContextExt(Stop_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
@@ -19,8 +19,8 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
    * Return the conext associated with this extened context
    */
 	@Override
-	public Group_definitionContext getContext(){
-		return (Group_definitionContext)contexts.get(contexts.size()-1);
+	public Stop_indexContext getContext(){
+		return (Stop_indexContext)contexts.get(contexts.size()-1);
 	}
 
   /*
@@ -28,16 +28,16 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
    */
 	@Override
 	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).group_definition();
+		return ((LAParser)getParser(str)).stop_index();
 	}
 
 	@Override
 	public void setContext(ParserRuleContext ctx){
 		if(ctx != null){
-			if(ctx instanceof Group_definitionContext){
-				addToContexts((Group_definitionContext) ctx);
+			if(ctx instanceof Stop_indexContext){
+				addToContexts((Stop_indexContext) ctx);
 			} else {
-				throw new ClassCastException(ctx.getClass().getSimpleName() + " cannot be cased to "+Group_definitionContext.class.getName());
+				throw new ClassCastException(ctx.getClass().getSimpleName() + " cannot be cased to "+Stop_indexContext.class.getName());
 			}
 		} else {
 			addToContexts(null);

@@ -7,6 +7,8 @@ import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
+import java.lang.Long;
+
 public class NumberContextExt extends AbstractBaseExtendedContext{
 
 	public NumberContextExt(NumberContext ctx) {
@@ -43,4 +45,17 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+  public Long eval() throws Exception {
+		if( (getContext().Hex_number() != null )&&  (getContext().Hex_number().getText().length()  > 0 )){
+			return Long.decode(getContext().Hex_number().getText());
+		}
+		else if( (getContext().Unsigned_number() != null) &&  (getContext().Unsigned_number().getText().length()  > 0 ) ){
+			return  Long.decode(getContext().Unsigned_number().getText());
+		}
+		else
+			throw new NumberFormatException(getContext().getText());
+	}
+	
+
 }

@@ -61,7 +61,7 @@ task AddExtendedContextToParseRule(type: JavaExec) {
     args file.getAbsolutePath()
 }
 
-tasks.register('makeDirs') {
+task makeDirs{
     File antlrDir = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/la/ANTLRv4')
     antlrDir.mkdirs()
     File extClassesDir = new File(projectDir, 'build/generated-src/st/main/com/proteus/la')
@@ -69,7 +69,7 @@ tasks.register('makeDirs') {
 }
 
 generateGrammarSource {
-    dependsOn tasks.makeDirs
+    dependsOn makeDirs
     File file = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/la/ANTLRv4')
     arguments += ['-lib', file.getAbsolutePath(), '-visitor', '-listener']
 }

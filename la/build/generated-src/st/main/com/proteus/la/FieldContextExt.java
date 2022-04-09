@@ -43,19 +43,4 @@ public class FieldContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
-
-	public final int getSize(){ return end - start + 1 }
-
-	public final String getFieldName(){
-		return getContext().field_name().getText();
-	}
-
-	@Override	
-	public void PopulateSymbolTable(SymbolTable symbolTable){
-		symbolTable.put(getFieldName(), this);
-		start = System.Integer.parse()
-	}
-
-	private int start, end;
-
 }

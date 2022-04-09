@@ -37,14 +37,14 @@ dependencies {
     implementation 'org.apache.poi:poi:3.7'
 }
 
-tasks.register('makeDirs') {
+task makeDirs{
     File file = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/framework/ANTLRv4')
     file.mkdirs()
 }
 
 
 generateGrammarSource {
-    dependsOn tasks.makeDirs
+    dependsOn makeDirs
     File file = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/framework/ANTLRv4')
     arguments += ['-lib', file.getAbsolutePath(), '-visitor', '-listener']
 }

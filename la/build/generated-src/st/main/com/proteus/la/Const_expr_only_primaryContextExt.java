@@ -33,4 +33,13 @@ public class Const_expr_only_primaryContextExt extends Constant_expressionContex
 			addToContexts(null);
 		}
 	}
+
+	@Override
+	public Long eval() throws Exception {
+		if( (getContext().number() != null) && (getContext().number().getText().length() > 0) )
+			return getContext().number().extendedContext.eval();
+		else
+			throw new NumberFormatException(getContext().getText());
+	}
+
 }

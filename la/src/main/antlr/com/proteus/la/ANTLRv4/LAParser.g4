@@ -200,28 +200,29 @@ locals [ Constant_expressionContextExt extendedContext = new Constant_expression
 : number #const_expr_only_primary
 |  unary_operator  number #const_expr_unary_op
 |  constant_expression  STARSTAR  constant_expression #const_expr_st_st
-|  constant_expression (  STAR 
-| DIV 
-| MODULO  ) constant_expression #const_expr_mutl
-|  constant_expression (  PLUS 
-| MINUS  ) constant_expression #const_expr_add
-|  constant_expression (  LSHIFT 
-| RSHIFT 
-| ALSHIFT 
-| ARSHIFT  ) constant_expression #const_expr_shift
-|  constant_expression (  LT 
-| GT 
-| LE 
-| GE  ) constant_expression #const_expr_comp
-|  constant_expression (  EQUALS 
-| NOT_EQUALS  ) constant_expression #const_expr_equality
-|  constant_expression (  AND  ) constant_expression #const_expr_binary_and
-|  constant_expression (  XOR 
-| XNOR 
-| XORN  ) constant_expression #const_expr_binary_xor
-|  constant_expression (  OR  ) constant_expression #const_expr_binary_or
-|  constant_expression (  LAND  ) constant_expression #const_expr_land
-|  constant_expression (  LOR  ) constant_expression #const_expr_lor
+|  constant_expression STAR constant_expression #const_expr_mult
+|  constant_expression DIV constant_expression #const_expr_div
+|  constant_expression MODULO constant_expression #const_expr_modulo
+|  constant_expression PLUS constant_expression #const_expr_add
+|  constant_expression MINUS constant_expression #const_expr_sub
+|  constant_expression LSHIFT constant_expression #const_expr_lshift
+|  constant_expression RSHIFT constant_expression #const_expr_rshift
+|  constant_expression ALSHIFT constant_expression #const_expr_alshift
+|  constant_expression ARSHIFT constant_expression #const_expr_arshift
+
+|  constant_expression LT constant_expression #const_expr_lt
+|  constant_expression GT constant_expression #const_expr_gt
+|  constant_expression LE constant_expression #const_expr_le
+|  constant_expression GE constant_expression #const_expr_ge
+|  constant_expression EQUALS constant_expression #const_expr_equal
+|  constant_expression NOT_EQUALS constant_expression #const_expr_not_equal
+|  constant_expression AND  constant_expression #const_expr_and
+|  constant_expression XOR constant_expression #const_expr_xor
+|  constant_expression XNOR constant_expression #const_expr_xnor
+|  constant_expression XORN constant_expression #const_expr_xorn
+|  constant_expression OR constant_expression #const_expr_or
+|  constant_expression LAND constant_expression #const_expr_land
+|  constant_expression LOR constant_expression #const_expr_lor
 |  constant_expression  QUATIONMARK  constant_expression  COLON  constant_expression #const_expr_conditional;
 
 unary_operator
