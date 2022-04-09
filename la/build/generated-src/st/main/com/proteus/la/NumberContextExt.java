@@ -11,10 +11,13 @@ import java.lang.Long;
 
 public class NumberContextExt extends AbstractBaseExtendedContext{
 
+	private Long number;
+
 	public NumberContextExt(NumberContext ctx) {
 		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
+		number = 0L;
 	}
 
   /*
@@ -46,15 +49,20 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 		}
 	}
 
-  public Long eval() throws Exception {
+	@Override
+  public void Initalize(){
 		if( (getContext().Hex_number() != null )&&  (getContext().Hex_number().getText().length()  > 0 )){
-			return Long.decode(getContext().Hex_number().getText());
+			number = Long.decode(getContext().Hex_number().getText());
 		}
 		else if( (getContext().Unsigned_number() != null) &&  (getContext().Unsigned_number().getText().length()  > 0 ) ){
-			return  Long.decode(getContext().Unsigned_number().getText());
+			number = Long.decode(getContext().Unsigned_number().getText());
 		}
 		else
 			throw new NumberFormatException(getContext().getText());
+	}
+
+	public Long eval() {
+			return number;
 	}
 	
 

@@ -123,7 +123,7 @@ public class <className>Ext extends <parentClassName>Ext{
 }
 >>
 
-extendedContextClassVistor(packageName, grammarName, parserName, methods)::=<<
+extendedContextClassVistorSkel(packageName, grammarName, parserName, methods)::=<<
 package <packageName>;
 
 import org.antlr.v4.runtime.ParserRuleContext;

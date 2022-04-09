@@ -27,7 +27,7 @@ public class ExtendedContextVisitorGenerator {
 	private String grammarFilePath;
 	private String templateFilePath;
 	private final String extendedContextClassVistorMethodSkel = "extendedContextClassVistorMethodSkel";
-	private final String extendedContextClassVistor = "extendedContextClassVistor";
+	private final String extendedContextClassVistorSkel = "extendedContextClassVistorSkel";
 
 	public ExtendedContextVisitorGenerator(String grammarFilePath, String templateFilePath, String directoryLocation,
 			String packageName, String grammarName, String parserName) {
@@ -44,8 +44,8 @@ public class ExtendedContextVisitorGenerator {
 		StringBuilder sb = new StringBuilder();
 		GrammarFile rulesOfGrammarFile = new GrammarFile(grammarFilePath);
 		STGroupFile stgf = new STGroupFile(templateFilePath);
-		ST st = stgf.getInstanceOf(extendedContextClassVistorMethodSkel);
 		for (String name : rulesOfGrammarFile.getParserRules()) {
+				ST st = stgf.getInstanceOf(extendedContextClassVistorMethodSkel);
 			String ruleContextName = toContext(name);
 			st.add("parserName", parserName);
 			st.add("ruleName", name.substring(0,1).toUpperCase()+ name.substring(1));
@@ -57,6 +57,7 @@ public class ExtendedContextVisitorGenerator {
 		//altRules -> Alt rule name : main rule
 		Map<String, String> altRules = rulesOfGrammarFile.getAltRules();
 		for (String name : altRules.keySet()) {
+			ST st = stgf.getInstanceOf(extendedContextClassVistorMethodSkel);
 			String ruleContextName = toContext(name);
 			st.add("parserName", parserName);
 			st.add("ruleName", name.substring(0,1).toUpperCase()+ name.substring(1));
@@ -67,7 +68,7 @@ public class ExtendedContextVisitorGenerator {
 		}
 		logger.info("Total "+ count);
 
-		st = stgf.getInstanceOf(extendedContextClassVistor);
+		ST st = stgf.getInstanceOf(extendedContextClassVistorSkel);
 		st.add("packageName", packageName);
 		st.add("grammarName", grammarName);
 		st.add("parserName", parserName);
