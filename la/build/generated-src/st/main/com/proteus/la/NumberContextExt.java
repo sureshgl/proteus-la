@@ -14,7 +14,7 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 	private Long number;
 
 	public NumberContextExt(NumberContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
 		number = 0L;
@@ -50,7 +50,7 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 	}
 
 	@Override
-  public void Initalize(){
+  public void Initialize(){
 		if( (getContext().Hex_number() != null )&&  (getContext().Hex_number().getText().length()  > 0 )){
 			number = Long.decode(getContext().Hex_number().getText());
 		}

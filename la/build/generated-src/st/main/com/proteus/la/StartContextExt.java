@@ -43,4 +43,11 @@ public class StartContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	@Override
+	public void PopulateSymbolTable(SymbolTable symbolTable)
+	{
+		localSymbolTable = symbolTable;	
+	}
+
 }

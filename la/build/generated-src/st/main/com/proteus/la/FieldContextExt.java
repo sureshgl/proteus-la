@@ -43,4 +43,11 @@ public class FieldContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	@Override
+	public void PopulateSymbolTable(SymbolTable symbolTable){
+		symbolTable.put(getContext().field_name().getText(), this);
+	}
+
+
 }

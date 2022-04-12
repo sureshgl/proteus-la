@@ -209,7 +209,6 @@ locals [ Constant_expressionContextExt extendedContext = new Constant_expression
 |  constant_expression RSHIFT constant_expression #const_expr_rshift
 |  constant_expression ALSHIFT constant_expression #const_expr_alshift
 |  constant_expression ARSHIFT constant_expression #const_expr_arshift
-
 |  constant_expression LT constant_expression #const_expr_lt
 |  constant_expression GT constant_expression #const_expr_gt
 |  constant_expression LE constant_expression #const_expr_le

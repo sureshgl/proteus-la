@@ -7,12 +7,15 @@ import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
+import com.proteus.framework.app.SymbolTable;
+
 public class ElementContextExt extends AbstractBaseExtendedContext{
 
 	public ElementContextExt(ElementContext ctx) {
 		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
+		localSymbolTable = new SymbolTable();
 	}
 
   /*
@@ -43,4 +46,12 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	@Override
+	public void PopulateSymbolTable(SymbolTable symbolTable){
+		symbolTable.put(getContext().element_name().getText(), this);
+		super.PopulateSymbolTable(localSymbolTable);
+	}
+
+
 }

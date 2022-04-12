@@ -123,7 +123,7 @@ public class <className>Ext extends <parentClassName>Ext{
 }
 >>
 
-extendedContextClassVistorSkel(packageName, grammarName, parserName, methods)::=<<
+extendedContextClassVisitorSkel(packageName, grammarName, parserName, methods)::=<<
 package <packageName>;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -138,11 +138,11 @@ public class <parserName>ExtendedContextVisitor extends <parserName>BaseVisitor\
 }
 >>
 
-extendedContextClassVistorMethodSkel(ruleName, ruleContextName, parserName)::=<<
+extendedContextClassVisitorMethodSkel(ruleName, ruleContextName, parserName)::=<<
 
 @Override 
 public AbstractBaseExtendedContext visit<ruleName>(<parserName>.<ruleContextName> ctx) {
-	return ctx.extendedContext;
+	return ctx.extendedContext.getContext().extendedContext;
 }
 
 >>

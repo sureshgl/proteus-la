@@ -35,15 +35,24 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractBaseExtendedContext.class);
 
 	//variables
-  private String grammarName;
-	private Parser parser;
-	private Lexer lexer;
-	private IExtendedContextVisitor extendedContextVisitor;
+  protected String grammarName;
+	protected Parser parser;
+	protected Lexer lexer;
+	protected ParserRuleContext ctx;
+	/*
+		extendedContextVisitor, always returns the extendedcontext of a latest transformation on that context
+	*/
+	protected IExtendedContextVisitor extendedContextVisitor;
+	protected SymbolTable localSymbolTable;
 
-
+	/*
+	 *Context store the transformations on that contexts. These contexts list acts as global for all the transformations
+	 * on this context. Every transformation should see the same list of contexts.
+	 * This way we are flattening the depth of the transformations.
+	 */
 	@Setter(AccessLevel.NONE)
-	protected List<ParserRuleContext> contexts;
-	protected ParserRuleContext parent;
+	protected List<ParserRuleContext> contexts;  
+	protected ParserRuleContext parent; //TODO fix the parent logic.
 
 	//abstract methods
 	abstract public ParserRuleContext getContext();
@@ -59,6 +68,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		this.lexer = lexer;
 		this.extendedContextVisitor = extendedContextVisitor;
 		this.contexts = new ArrayList<ParserRuleContext>();
+		this.localSymbolTable = null;
 	}
 
 		// This method is not exposed outside.
@@ -71,6 +81,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 
 		protected void addToContexts(ParserRuleContext context) {
 			contexts.add(context);
+			
 			AbstractBaseExtendedContext extCtx = getExtendedContext(context);
 			if (extCtx != null) {
 				extCtx.contexts = contexts;
@@ -200,8 +211,6 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-
-
 	public void PopulateSymbolTable(SymbolTable symbolTable)
 	{
 		ParserRuleContext ctx = getContext();
@@ -231,16 +240,64 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-
-	//Use this step to initialize all the data structures in the AST.
-	public void Initalize()
+	//Use this step to initialize all the data structures in the AST.super.
+	public void Initialize() throws Exception
 	{
 		ParserRuleContext ctx = getContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(!(childCtx instanceof TerminalNode)){
 					if(childCtx.getText().length() >0){
-						getExtendedContext(childCtx).Initalize();
+						getExtendedContext(childCtx).Initialize();
+					}
+				}
+			}
+		}
+	}
+
+	private AbstractBaseExtendedContext lookUp(String symbol){
+		AbstractBaseExtendedContext symbolExtendedContext = null;
+		if(localSymbolTable != null){
+			symbolExtendedContext = localSymbolTable.get(symbol);
+		}
+		if( symbolExtendedContext == null){
+			if( parent != null ){
+				return extendedContextVisitor.visit(parent).lookUp(symbol);
+			}
+			else{
+				return null;
+			}
+		}
+		else{
+			return symbolExtendedContext;
+		}
+	}
+
+	//get chain_a.group_b.element_c.field_d -> fieldExtendedcontext of field_d
+	public AbstractBaseExtendedContext getSymbol(String symbol){
+		if(symbol == null || symbol.length() == 0) 
+			return null;
+		AbstractBaseExtendedContext abstractBaseExtendedContext = null;
+		String[] args = symbol.split("\\.");
+		abstractBaseExtendedContext = lookUp(args[0]); //LOOK UP
+		for(int i=1; i<args.length; i++){
+			if(abstractBaseExtendedContext != null){
+				abstractBaseExtendedContext = abstractBaseExtendedContext.localSymbolTable.get(args[i]);  //LOOK IN
+			}
+			else{
+				return null;
+			}
+		}
+		return abstractBaseExtendedContext;
+	}
+
+	public void PopulateLAStructs(){
+		ParserRuleContext ctx = getContext();
+		if(ctx != null && ctx.children != null && ctx.children.size()>0){
+			for(ParseTree childCtx : ctx.children){
+				if(!(childCtx instanceof TerminalNode)){
+					if(childCtx.getText().length() >0){
+						getExtendedContext(childCtx).PopulateLAStructs();
 					}
 				}
 			}

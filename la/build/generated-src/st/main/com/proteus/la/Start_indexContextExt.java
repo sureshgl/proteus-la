@@ -9,10 +9,13 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 
 public class Start_indexContextExt extends AbstractBaseExtendedContext{
 
+	private Long start_index;
+
 	public Start_indexContextExt(Start_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
+		start_index = 0L;
 	}
 
   /*
@@ -42,5 +45,15 @@ public class Start_indexContextExt extends AbstractBaseExtendedContext{
 		} else {
 			addToContexts(null);
 		}
+	}
+
+	public Long getIndex(){
+		return start_index;
+	}
+	
+	@Override
+	public void Initialize() throws Exception{
+		//start_index = getContext().constant_expression().extendedContext.eval();
+		start_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getContext().constant_expression())).eval();
 	}
 }

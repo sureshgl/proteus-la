@@ -9,10 +9,12 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 
 public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 
+	private Long stop_index;
 	public Stop_indexContextExt(Stop_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
+		stop_index = 0L;
 	}
 
   /*
@@ -43,4 +45,17 @@ public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	public Long getIndex()
+	{
+		return stop_index;
+	}
+
+	@Override
+	public void Initialize() throws Exception{
+		//stop_index = getContext().constant_expression().extendedContext.eval(); //Wrong way of accessing the extended context of a child nodes.
+		stop_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getContext().constant_expression())).eval();
+
+	}
+
 }

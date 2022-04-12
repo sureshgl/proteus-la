@@ -10,6 +10,8 @@ public class SymbolTable {
 	
 	protected static final Logger L = LoggerFactory.getLogger(SymbolTable.class);
 
+  private Map<String,AbstractBaseExtendedContext> map;
+
 	public SymbolTable(){
 		map = new HashMap<String,AbstractBaseExtendedContext>();
 	}
@@ -26,5 +28,9 @@ public class SymbolTable {
 		map.remove(key);
 	}
 
-  private Map<String,AbstractBaseExtendedContext> map;
+	//get("chain.group.element.field")
+	public AbstractBaseExtendedContext get(String key){
+			return map.get(key);
+	}
+
 }

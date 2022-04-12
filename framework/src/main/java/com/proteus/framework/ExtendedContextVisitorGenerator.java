@@ -26,8 +26,8 @@ public class ExtendedContextVisitorGenerator {
 	private String directoryLocation;
 	private String grammarFilePath;
 	private String templateFilePath;
-	private final String extendedContextClassVistorMethodSkel = "extendedContextClassVistorMethodSkel";
-	private final String extendedContextClassVistorSkel = "extendedContextClassVistorSkel";
+	private final String extendedContextClassVistorMethodSkel = "extendedContextClassVisitorMethodSkel";
+	private final String extendedContextClassVistorSkel = "extendedContextClassVisitorSkel";
 
 	public ExtendedContextVisitorGenerator(String grammarFilePath, String templateFilePath, String directoryLocation,
 			String packageName, String grammarName, String parserName) {

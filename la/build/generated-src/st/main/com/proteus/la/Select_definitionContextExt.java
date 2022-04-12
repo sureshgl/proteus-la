@@ -6,6 +6,10 @@ import com.proteus.framework.app.*;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
+import com.proteus.la.app.LAStructs;
+import com.proteus.la.app.LAStructs.*;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 
@@ -13,6 +17,7 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 		parent = ctx;
+		LAStructs.chains = new LinkedHashMap<String, LAStructs.Chain>();
 	}
 
   /*
@@ -42,5 +47,26 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 		} else {
 			addToContexts(null);
 		}
+	}
+
+	@Override
+	public void Initialize()throws Exception{
+		PopulateLAStructs();
+		super.Initialize();
+	}
+
+	public void SelectSymanticCheck(){
+
+	}
+
+	public void process(){
+		try{
+			Initialize();
+		}
+		catch(Exception ex){
+
+		}
+		PopulateLAStructs();
+		SelectSymanticCheck();
 	}
 }

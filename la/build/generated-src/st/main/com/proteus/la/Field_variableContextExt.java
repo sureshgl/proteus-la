@@ -43,4 +43,41 @@ public class Field_variableContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	public String getChainName(){
+		return getContext().getText().split("\\.")[0];
+	}
+
+	public String getGroupName(){
+		return getContext().getText().split("\\.")[1];
+	}
+
+	public String getElementName(){
+		return getContext().getText().split("\\.")[2];
+	}
+
+	public String getFieldName(){
+		return getContext().getText().split("\\.")[3];
+	}
+
+	public Chain_definitionContextExt getChain(){
+		String chainName = getChainName();
+		return(Chain_definitionContextExt) getSymbol(chainName);
+	}
+
+	public Group_definitionContextExt getGroup(){
+		String groupName = getChainName() + "." + getGroupName();
+		return (Group_definitionContextExt)getSymbol(groupName);
+	}
+
+	public ElementContextExt getElement(){
+		String elementName = getChainName() + "." + getGroupName() + "." + getElementName();
+		return (ElementContextExt)getSymbol(elementName);
+	}
+
+	public FieldContextExt getField(){
+		String fieldName = getContext().getText();
+		return (FieldContextExt)getSymbol(fieldName);
+	}
+
 }
