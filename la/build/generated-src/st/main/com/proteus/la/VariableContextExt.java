@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class VariableContextExt extends AbstractBaseExtendedContext{
 
 	public VariableContextExt(VariableContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public VariableContext getContext(){
-		return (VariableContext)contexts.get(contexts.size()-1);
+	public VariableContext getLatestContext(){
+		return (VariableContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

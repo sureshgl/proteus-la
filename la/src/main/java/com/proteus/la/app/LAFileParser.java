@@ -42,7 +42,7 @@ public class LAFileParser {
 			if (startContextExt == null) {
 				logger.warn("No context");
 			}
-			StartContext startContext = startContextExt.getContext();
+			StartContext startContext = startContextExt.getLatestContext();
 			logger.info("Done with " + file);
 			return startContext;
 		} else {

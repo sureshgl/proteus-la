@@ -12,19 +12,19 @@ public class Start_indexContextExt extends AbstractBaseExtendedContext{
 	private Long start_index;
 
 	public Start_indexContextExt(Start_indexContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 		start_index = 0L;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Start_indexContext getContext(){
-		return (Start_indexContext)contexts.get(contexts.size()-1);
+	public Start_indexContext getLatestContext(){
+		return (Start_indexContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -54,6 +54,6 @@ public class Start_indexContextExt extends AbstractBaseExtendedContext{
 	@Override
 	public void Initialize() throws Exception{
 		//start_index = getContext().constant_expression().extendedContext.eval();
-		start_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getContext().constant_expression())).eval();
+		start_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getLatestContext().constant_expression())).eval();
 	}
 }

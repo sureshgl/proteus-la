@@ -12,9 +12,12 @@ public class Const_expr_addContextExt extends Constant_expressionContextExt{
 		super(ctx);
 	}
 
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Const_expr_addContext getContext(){
-		return (Const_expr_addContext)contexts.get(contexts.size()-1);
+	public Const_expr_addContext getLatestContext(){
+		return (Const_expr_addContext)super.getLatestContext();
 	}
 
 	@Override
@@ -39,8 +42,8 @@ public class Const_expr_addContextExt extends Constant_expressionContextExt{
 	@Override 
 	public Long eval() throws Exception
 	{
-		Long lhs = getContext().constant_expression(0).extendedContext.eval();
-		Long rhs = getContext().constant_expression(0).extendedContext.eval();
+		Long lhs = getLatestContext().constant_expression(0).extendedContext.eval();
+		Long rhs = getLatestContext().constant_expression(0).extendedContext.eval();
 		return lhs + rhs;
 	}
 }

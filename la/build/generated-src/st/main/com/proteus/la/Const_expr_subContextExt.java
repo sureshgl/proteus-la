@@ -10,9 +10,12 @@ public class Const_expr_subContextExt extends Constant_expressionContextExt{
 		super(ctx);
 	}
 
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Const_expr_subContext getContext(){
-		return (Const_expr_subContext)contexts.get(contexts.size()-1);
+	public Const_expr_subContext getLatestContext(){
+		return (Const_expr_subContext)super.getLatestContext();
 	}
 
 	@Override

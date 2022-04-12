@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Isolate_addressesContextExt extends AbstractBaseExtendedContext{
 
 	public Isolate_addressesContextExt(Isolate_addressesContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Isolate_addressesContext getContext(){
-		return (Isolate_addressesContext)contexts.get(contexts.size()-1);
+	public Isolate_addressesContext getLatestContext(){
+		return (Isolate_addressesContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

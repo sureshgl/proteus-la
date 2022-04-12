@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Unary_operatorContextExt extends AbstractBaseExtendedContext{
 
 	public Unary_operatorContextExt(Unary_operatorContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Unary_operatorContext getContext(){
-		return (Unary_operatorContext)contexts.get(contexts.size()-1);
+	public Unary_operatorContext getLatestContext(){
+		return (Unary_operatorContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

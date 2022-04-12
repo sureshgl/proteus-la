@@ -34,6 +34,7 @@ import com.proteus.framework.app.IGetFormattedText;
 public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractBaseExtendedContext.class);
 
+
 	//variables
   protected String grammarName;
 	protected Parser parser;
@@ -42,7 +43,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	/*
 		extendedContextVisitor, always returns the extendedcontext of a latest transformation on that context
 	*/
-	protected IExtendedContextVisitor extendedContextVisitor;
+	protected IExtendedContextVisitor extendedContextVisitor; //TODO, this can be  a static and can be initialied at app level.
 	protected SymbolTable localSymbolTable;
 
 	/*
@@ -55,20 +56,31 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	protected ParserRuleContext parent; //TODO fix the parent logic.
 
 	//abstract methods
-	abstract public ParserRuleContext getContext();
 	abstract public ParserRuleContext getContext(String str);
 	abstract public void setContext(ParserRuleContext ctx);
 
 	public static SymbolTable globalSymbolTable = new SymbolTable(); //Global Symbol table.
 
 	//constructor
-	public AbstractBaseExtendedContext(String grammarName, Parser parser, Lexer lexer, IExtendedContextVisitor extendedContextVisitor){
+	public AbstractBaseExtendedContext(String grammarName, Parser parser, Lexer lexer, ParserRuleContext ctx, IExtendedContextVisitor extendedContextVisitor){
     this.grammarName = grammarName;
 		this.parser = parser;
 		this.lexer = lexer;
+		this.ctx = ctx;
+		this.parent = ctx.getParent();
 		this.extendedContextVisitor = extendedContextVisitor;
 		this.contexts = new ArrayList<ParserRuleContext>();
 		this.localSymbolTable = null;
+
+	}
+
+	public ParserRuleContext getLatestContext(){
+		if(contexts.size() == 0){
+			return ctx;
+		}
+		else{
+			return extendedContextVisitor.visit(ctx).contexts.get(contexts.size() -1);
+		}
 	}
 
 		// This method is not exposed outside.
@@ -131,15 +143,15 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	@Override
 	public String getFormattedText(){
 		StringBuilder sb = new StringBuilder();
-		Params params = new Params(getContext(), sb);
-		params.setBeginingOfAlignemtText(getContext().start.getStartIndex());
+		Params params = new Params(getLatestContext(), sb);
+		params.setBeginingOfAlignemtText(getLatestContext().start.getStartIndex());
 		getFormattedText(params);
 		//logger.debug("output =\n" + sb.toString());
 		return sb.toString();
 	}
 
 	protected void getFormattedText(Params params){
-		ParserRuleContext ctx = getContext();
+		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(childCtx instanceof TerminalNode){
@@ -161,7 +173,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	 */
 
 	private Params getUpdatedParams(Params params) {
-		if ( getContext() == null)
+		if ( getLatestContext() == null)
 		{
 			//The item is removed during the transformation, hence skip its contents.
 			String alignmentText = params.getInput().getText(new Interval(params.getBeginingOfAlignemtText(), params.getContext().start.getStartIndex()-1));
@@ -169,7 +181,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 			params.setBeginingOfAlignemtText(params.getContext().stop.getStopIndex() + 1); 
 			return null;
 		}
-		if (getContext().start.getInputStream() != params.getContext().start.getInputStream())
+		if (getLatestContext().start.getInputStream() != params.getContext().start.getInputStream())
 		{
 			/*
 			 * advance the  begining of  alignment text, as we are going to consider 'mostRecentContext' in its place.
@@ -180,16 +192,16 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 				params.getStringBuilder().append(alignmentText);
 			}
 			params.setBeginingOfAlignemtText(params.getContext().stop.getStopIndex() + 1); 
-			return new Params(getContext(),params.getStringBuilder());
+			return new Params(getLatestContext(),params.getStringBuilder());
 		}
 		else
 		{
-			if (getContext().parent == null)
+			if (getLatestContext().parent == null)
 			{
 				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignemtText, params.getContext().start.getInputStream().size()));
 				params.getStringBuilder().append(alignmentText);
 			}
-			params.setContext(getContext());
+			params.setContext(getLatestContext());
 			return params;
 		}
 	}
@@ -213,7 +225,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 
 	public void PopulateSymbolTable(SymbolTable symbolTable)
 	{
-		ParserRuleContext ctx = getContext();
+		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(!(childCtx instanceof TerminalNode)){
@@ -228,7 +240,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	//Driver to perform the semantic checks.
 	public void SemanticCheck()
 	{
-		ParserRuleContext ctx = getContext();
+		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(!(childCtx instanceof TerminalNode)){
@@ -243,7 +255,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	//Use this step to initialize all the data structures in the AST.super.
 	public void Initialize() throws Exception
 	{
-		ParserRuleContext ctx = getContext();
+		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(!(childCtx instanceof TerminalNode)){
@@ -292,7 +304,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	}
 
 	public void PopulateLAStructs(){
-		ParserRuleContext ctx = getContext();
+		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(!(childCtx instanceof TerminalNode)){

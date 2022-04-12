@@ -12,19 +12,18 @@ import com.proteus.framework.app.SymbolTable;
 public class ElementContextExt extends AbstractBaseExtendedContext{
 
 	public ElementContextExt(ElementContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
-		localSymbolTable = new SymbolTable();
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ElementContext getContext(){
-		return (ElementContext)contexts.get(contexts.size()-1);
+	public ElementContext getLatestContext(){
+		return (ElementContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -49,7 +48,7 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void PopulateSymbolTable(SymbolTable symbolTable){
-		symbolTable.put(getContext().element_name().getText(), this);
+		symbolTable.put(getLatestContext().element_name().getText(), this);
 		super.PopulateSymbolTable(localSymbolTable);
 	}
 

@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Chain_number_indexContextExt extends AbstractBaseExtendedContext{
 
 	public Chain_number_indexContextExt(Chain_number_indexContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Chain_number_indexContext getContext(){
-		return (Chain_number_indexContext)contexts.get(contexts.size()-1);
+	public Chain_number_indexContext getLatestContext(){
+		return (Chain_number_indexContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

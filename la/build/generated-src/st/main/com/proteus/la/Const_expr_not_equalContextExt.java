@@ -10,9 +10,12 @@ public class Const_expr_not_equalContextExt extends Constant_expressionContextEx
 		super(ctx);
 	}
 
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Const_expr_not_equalContext getContext(){
-		return (Const_expr_not_equalContext)contexts.get(contexts.size()-1);
+	public Const_expr_not_equalContext getLatestContext(){
+		return (Const_expr_not_equalContext)super.getLatestContext();
 	}
 
 	@Override

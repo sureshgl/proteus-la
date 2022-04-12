@@ -15,18 +15,18 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 
 	private int field_count;
 	public Field_variable_listContextExt(Field_variable_listContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Field_variable_listContext getContext(){
-		return (Field_variable_listContext)contexts.get(contexts.size()-1);
+	public Field_variable_listContext getLatestContext(){
+		return (Field_variable_listContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -51,9 +51,9 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void PopulateLAStructs(){
-		List<Field_variableContext> fieldContexts= getContext().field_variable();
+		List<Field_variableContext> fieldContexts= getLatestContext().field_variable();
 		for(Field_variableContext fieldContext : fieldContexts){
-			Field_variableContext latestFieldContext = fieldContext.extendedContext.getContext();
+			Field_variableContext latestFieldContext = fieldContext.extendedContext.getLatestContext();
 			String chainName = latestFieldContext.extendedContext.getChainName();
 			if(LAStructs.chains.get(chainName) == null)	{
 				LAStructs.Chain chain = new LAStructs.Chain();

@@ -11,19 +11,19 @@ public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 
 	private Long stop_index;
 	public Stop_indexContextExt(Stop_indexContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 		stop_index = 0L;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Stop_indexContext getContext(){
-		return (Stop_indexContext)contexts.get(contexts.size()-1);
+	public Stop_indexContext getLatestContext(){
+		return (Stop_indexContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -54,7 +54,7 @@ public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 	@Override
 	public void Initialize() throws Exception{
 		//stop_index = getContext().constant_expression().extendedContext.eval(); //Wrong way of accessing the extended context of a child nodes.
-		stop_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getContext().constant_expression())).eval();
+		stop_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getLatestContext().constant_expression())).eval();
 
 	}
 

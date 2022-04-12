@@ -12,21 +12,20 @@ import java.lang.Long;
 public class NumberContextExt extends AbstractBaseExtendedContext{
 
 	private Long number;
-
 	public NumberContextExt(NumberContext ctx) {
-		super("la", new LAParser(null), new LALexer(null),  new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 		number = 0L;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public NumberContext getContext(){
-		return (NumberContext)contexts.get(contexts.size()-1);
+	public NumberContext getLatestContext(){
+		return (NumberContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -51,14 +50,14 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 
 	@Override
   public void Initialize(){
-		if( (getContext().Hex_number() != null )&&  (getContext().Hex_number().getText().length()  > 0 )){
-			number = Long.decode(getContext().Hex_number().getText());
+		if( (getLatestContext().Hex_number() != null )&&  (getLatestContext().Hex_number().getText().length()  > 0 )){
+			number = Long.decode(getLatestContext().Hex_number().getText());
 		}
-		else if( (getContext().Unsigned_number() != null) &&  (getContext().Unsigned_number().getText().length()  > 0 ) ){
-			number = Long.decode(getContext().Unsigned_number().getText());
+		else if( (getLatestContext().Unsigned_number() != null) &&  (getLatestContext().Unsigned_number().getText().length()  > 0 ) ){
+			number = Long.decode(getLatestContext().Unsigned_number().getText());
 		}
 		else
-			throw new NumberFormatException(getContext().getText());
+			throw new NumberFormatException(getLatestContext().getText());
 	}
 
 	public Long eval() {

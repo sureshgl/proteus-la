@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Shift_addressContextExt extends AbstractBaseExtendedContext{
 
 	public Shift_addressContextExt(Shift_addressContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Shift_addressContext getContext(){
-		return (Shift_addressContext)contexts.get(contexts.size()-1);
+	public Shift_addressContext getLatestContext(){
+		return (Shift_addressContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

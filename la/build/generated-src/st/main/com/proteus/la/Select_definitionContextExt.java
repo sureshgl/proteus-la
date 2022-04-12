@@ -14,19 +14,19 @@ import java.util.LinkedHashMap;
 public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 
 	public Select_definitionContextExt(Select_definitionContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 		LAStructs.chains = new LinkedHashMap<String, LAStructs.Chain>();
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Select_definitionContext getContext(){
-		return (Select_definitionContext)contexts.get(contexts.size()-1);
+	public Select_definitionContext getLatestContext(){
+		return (Select_definitionContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

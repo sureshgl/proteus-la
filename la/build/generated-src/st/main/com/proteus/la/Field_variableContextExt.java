@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Field_variableContextExt extends AbstractBaseExtendedContext{
 
 	public Field_variableContextExt(Field_variableContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Field_variableContext getContext(){
-		return (Field_variableContext)contexts.get(contexts.size()-1);
+	public Field_variableContext getLatestContext(){
+		return (Field_variableContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -45,19 +45,19 @@ public class Field_variableContextExt extends AbstractBaseExtendedContext{
 	}
 
 	public String getChainName(){
-		return getContext().getText().split("\\.")[0];
+		return getLatestContext().getText().split("\\.")[0];
 	}
 
 	public String getGroupName(){
-		return getContext().getText().split("\\.")[1];
+		return getLatestContext().getText().split("\\.")[1];
 	}
 
 	public String getElementName(){
-		return getContext().getText().split("\\.")[2];
+		return getLatestContext().getText().split("\\.")[2];
 	}
 
 	public String getFieldName(){
-		return getContext().getText().split("\\.")[3];
+		return getLatestContext().getText().split("\\.")[3];
 	}
 
 	public Chain_definitionContextExt getChain(){
@@ -76,7 +76,7 @@ public class Field_variableContextExt extends AbstractBaseExtendedContext{
 	}
 
 	public FieldContextExt getField(){
-		String fieldName = getContext().getText();
+		String fieldName = getLatestContext().getText();
 		return (FieldContextExt)getSymbol(fieldName);
 	}
 

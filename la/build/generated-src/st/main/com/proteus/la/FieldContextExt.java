@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class FieldContextExt extends AbstractBaseExtendedContext{
 
 	public FieldContextExt(FieldContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public FieldContext getContext(){
-		return (FieldContext)contexts.get(contexts.size()-1);
+	public FieldContext getLatestContext(){
+		return (FieldContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -46,7 +46,7 @@ public class FieldContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void PopulateSymbolTable(SymbolTable symbolTable){
-		symbolTable.put(getContext().field_name().getText(), this);
+		symbolTable.put(getLatestContext().field_name().getText(), this);
 	}
 
 

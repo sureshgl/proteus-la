@@ -9,13 +9,12 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Constant_expressionContextExt extends AbstractBaseExtendedContext{
 
 	public Constant_expressionContextExt(Constant_expressionContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null), ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
 	@Override
-	public Constant_expressionContext getContext(){
+	public Constant_expressionContext getLatestContext(){
 		throw new UnsupportedOperationException("Alt rule should not call the base class method");
 	}
 

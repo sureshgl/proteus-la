@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 
 	public Group_definitionContextExt(Group_definitionContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Group_definitionContext getContext(){
-		return (Group_definitionContext)contexts.get(contexts.size()-1);
+	public Group_definitionContext getLatestContext(){
+		return (Group_definitionContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

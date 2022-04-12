@@ -14,17 +14,18 @@ import com.proteus.la.Stop_indexContextExt;
 public class Field_rangeContextExt extends AbstractBaseExtendedContext{
 
 	public Field_rangeContextExt(Field_rangeContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Field_rangeContext getContext(){
-		return (Field_rangeContext)contexts.get(contexts.size()-1);
+	public Field_rangeContext getLatestContext(){
+		return (Field_rangeContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -48,11 +49,11 @@ public class Field_rangeContextExt extends AbstractBaseExtendedContext{
 	}
 
 	public Long getFieldStartIndex(){
-		return ((Start_indexContextExt)extendedContextVisitor.visit(getContext().start_index())).getIndex();
+		return ((Start_indexContextExt)extendedContextVisitor.visit(getLatestContext().start_index())).getIndex();
 	}
 
 	public Long getFieldStopIndex(){
-		return ((Stop_indexContextExt)extendedContextVisitor.visit(getContext().stop_index())).getIndex();
+		return ((Stop_indexContextExt)extendedContextVisitor.visit(getLatestContext().stop_index())).getIndex();
 	}
 
 	public Long getSize(){

@@ -10,9 +10,12 @@ public class Const_expr_arshiftContextExt extends Constant_expressionContextExt{
 		super(ctx);
 	}
 
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Const_expr_arshiftContext getContext(){
-		return (Const_expr_arshiftContext)contexts.get(contexts.size()-1);
+	public Const_expr_arshiftContext getLatestContext(){
+		return (Const_expr_arshiftContext)super.getLatestContext();
 	}
 
 	@Override

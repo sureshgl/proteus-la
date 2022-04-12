@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Chain_member_listContextExt extends AbstractBaseExtendedContext{
 
 	public Chain_member_listContextExt(Chain_member_listContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Chain_member_listContext getContext(){
-		return (Chain_member_listContext)contexts.get(contexts.size()-1);
+	public Chain_member_listContext getLatestContext(){
+		return (Chain_member_listContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

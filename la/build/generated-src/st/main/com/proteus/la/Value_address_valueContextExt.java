@@ -10,18 +10,18 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 public class Value_address_valueContextExt extends AbstractBaseExtendedContext{
 
 	public Value_address_valueContextExt(Value_address_valueContext ctx) {
-		super("la", new LAParser(null), new LALexer(null), new LAParserExtendedContextVisitor());
+		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
-  /*
-   * Return the conext associated with this extened context
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public Value_address_valueContext getContext(){
-		return (Value_address_valueContext)contexts.get(contexts.size()-1);
+	public Value_address_valueContext getLatestContext(){
+		return (Value_address_valueContext)super.getLatestContext();
 	}
+
 
   /*
    * Create a context for the given string  with extended context populated in that

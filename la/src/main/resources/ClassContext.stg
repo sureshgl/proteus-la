@@ -12,18 +12,18 @@ import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
 public class <className>Ext extends AbstractBaseExtendedContext{
 
 	public <className>Ext(<className> ctx) {
-		super("<grammarName>", new <parserName>(null), new <lexerName>(null), new <parserName>ExtendedContextVisitor());
+		super("<grammarName>", new <parserName>(null), new <lexerName>(null),  ctx, new <parserName>ExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
-	
-  /*
-   * Return the conext associated with this extened context
-   */
+
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public <className> getContext(){
-		return (<className>)contexts.get(contexts.size()-1);
+	public <className> getLatestContext(){
+		return (<className>)super.getLatestContext();
 	}
+
 	
   /*
    * Create a context for the given string  with extended context populated in that
@@ -60,13 +60,12 @@ import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
 public class <className>Ext extends AbstractBaseExtendedContext{
 
 	public <className>Ext(<className> ctx) {
-		super("<grammarName>", new <parserName>(null), new <lexerName>(null), new <parserName>ExtendedContextVisitor());
+		super("<grammarName>", new <parserName>(null), new <lexerName>(null), ctx, new <parserName>ExtendedContextVisitor());
 		addToContexts(ctx);
-		parent = ctx;
 	}
 
 	@Override
-	public <className> getContext(){
+	public <className> getLatestContext(){
 		throw new UnsupportedOperationException("Alt rule should not call the base class method");
 	}
 	
@@ -97,9 +96,12 @@ public class <className>Ext extends <parentClassName>Ext{
 		super(ctx);
 	}
 	
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public <className> getContext(){
-		return (<className>)contexts.get(contexts.size()-1);
+	public <className> getLatestContext(){
+		return (<className>)super.getLatestContext();
 	}
 	
 	@Override
@@ -142,7 +144,7 @@ extendedContextClassVisitorMethodSkel(ruleName, ruleContextName, parserName)::=<
 
 @Override 
 public AbstractBaseExtendedContext visit<ruleName>(<parserName>.<ruleContextName> ctx) {
-	return ctx.extendedContext.getContext().extendedContext;
+	return ctx.extendedContext.getLatestContext().extendedContext;
 }
 
 >>
