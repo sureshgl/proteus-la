@@ -43,4 +43,11 @@ public class Isolate_variable_definitionContextExt extends AbstractBaseExtendedC
 			addToContexts(null);
 		}
 	}
+
+	@Override
+	public void processFieldReferences(){
+		//Stop further processing on this branch- as that is no-op
+		return;
+	}
+	
 }

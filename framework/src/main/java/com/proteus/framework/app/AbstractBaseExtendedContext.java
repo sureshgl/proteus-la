@@ -70,8 +70,8 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		this.parent = ctx.getParent();
 		this.extendedContextVisitor = extendedContextVisitor;
 		this.contexts = new ArrayList<ParserRuleContext>();
+		contexts.add(this.ctx);
 		this.localSymbolTable = null;
-
 	}
 
 	public ParserRuleContext getLatestContext(){
@@ -252,6 +252,8 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
+
+	private Boolean initialized = false;
 	//Use this step to initialize all the data structures in the AST.super.
 	public void Initialize() throws Exception
 	{
@@ -267,7 +269,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-	private AbstractBaseExtendedContext lookUp(String symbol){
+	public AbstractBaseExtendedContext lookUp(String symbol){
 		AbstractBaseExtendedContext symbolExtendedContext = null;
 		if(localSymbolTable != null){
 			symbolExtendedContext = localSymbolTable.get(symbol);
@@ -285,6 +287,10 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
+	public AbstractBaseExtendedContext lookIn(String symbol){
+		return localSymbolTable.get(symbol);
+	}
+
 	//get chain_a.group_b.element_c.field_d -> fieldExtendedcontext of field_d
 	public AbstractBaseExtendedContext getSymbol(String symbol){
 		if(symbol == null || symbol.length() == 0) 
@@ -292,9 +298,10 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		AbstractBaseExtendedContext abstractBaseExtendedContext = null;
 		String[] args = symbol.split("\\.");
 		abstractBaseExtendedContext = lookUp(args[0]); //LOOK UP
+		
 		for(int i=1; i<args.length; i++){
 			if(abstractBaseExtendedContext != null){
-				abstractBaseExtendedContext = abstractBaseExtendedContext.localSymbolTable.get(args[i]);  //LOOK IN
+				abstractBaseExtendedContext = abstractBaseExtendedContext.lookIn(args[i]);  //LOOK IN
 			}
 			else{
 				return null;
@@ -303,13 +310,26 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		return abstractBaseExtendedContext;
 	}
 
-	public void PopulateLAStructs(){
+	public void processFieldReferences(){
 		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
 			for(ParseTree childCtx : ctx.children){
 				if(!(childCtx instanceof TerminalNode)){
 					if(childCtx.getText().length() >0){
-						getExtendedContext(childCtx).PopulateLAStructs();
+						getExtendedContext(childCtx).processFieldReferences();
+					}
+				}
+			}
+		}
+	}
+
+	public void GenerateAddresses(){
+		ParserRuleContext ctx = getLatestContext();
+		if(ctx != null && ctx.children != null && ctx.children.size()>0){
+			for(ParseTree childCtx : ctx.children){
+				if(!(childCtx instanceof TerminalNode)){
+					if(childCtx.getText().length() >0){
+						getExtendedContext(childCtx).GenerateAddresses();
 					}
 				}
 			}

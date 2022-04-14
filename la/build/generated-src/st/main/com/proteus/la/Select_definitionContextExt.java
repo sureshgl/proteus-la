@@ -51,7 +51,6 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void Initialize()throws Exception{
-		PopulateLAStructs();
 		super.Initialize();
 	}
 
@@ -64,9 +63,9 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 			Initialize();
 		}
 		catch(Exception ex){
-
 		}
-		PopulateLAStructs();
+		processFieldReferences();
 		SelectSymanticCheck();
+		GenerateAddresses();
 	}
 }

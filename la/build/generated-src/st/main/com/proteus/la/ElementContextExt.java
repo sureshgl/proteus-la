@@ -14,6 +14,7 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 	public ElementContextExt(ElementContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		addToContexts(ctx);
+		localSymbolTable = new SymbolTable();
 	}
 
 	/*
@@ -48,8 +49,9 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void PopulateSymbolTable(SymbolTable symbolTable){
-		symbolTable.put(getLatestContext().element_name().getText(), this);
 		super.PopulateSymbolTable(localSymbolTable);
+		String elementName = getLatestContext().element_name().extendedContext.getName();
+		symbolTable.put(elementName, this);
 	}
 
 

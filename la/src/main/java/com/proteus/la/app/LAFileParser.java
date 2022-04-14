@@ -1,23 +1,15 @@
 package com.proteus.la.app;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.proteus.framework.utils.FileUtils;
-import com.proteus.framework.IExtendedContextVisitor;
-import com.proteus.framework.app.AbstractBaseExtendedContext;
-import com.proteus.la.StartContextExt;
-import com.proteus.la.LAParserExtendedContextVisitor;
-import com.proteus.la.ANTLRv4.LAParser.StartContext;
+import com.proteus.la.*;
+import com.proteus.la.ANTLRv4.LAParser.*;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.framework.DescriptiveErrorListener;
@@ -28,29 +20,39 @@ public class LAFileParser {
 
 	private static final Logger logger = LoggerFactory.getLogger(LAFileParser.class);
 
-	public static StartContext getStartContext(File file) {
+	public  StartContextExt getStartContext(File file) {
 		logger.info("trying to parse " + file);
-
     String content = FileUtils.ReadFromFile(file);
-		ParserRuleContext parserRuleContext = trySLLContent(content);
-		if (parserRuleContext == null) {
-			parserRuleContext = tryLLContent(content);
+		LAParser parser = trySLLContent(content);
+		StartContext startContext = (StartContext)parser.start();
+		if( startContext == null ){
+			parser = tryLLContent(content);
+			startContext = (StartContext)parser.start();
 		}
-		if (parserRuleContext != null) {
-			IExtendedContextVisitor extendedContextVisitor = new LAParserExtendedContextVisitor();
-			StartContextExt startContextExt = (StartContextExt) extendedContextVisitor.visit(parserRuleContext);
-			if (startContextExt == null) {
-				logger.warn("No context");
-			}
-			StartContext startContext = startContextExt.getLatestContext();
-			logger.info("Done with " + file);
-			return startContext;
+		if (startContext != null) {
+			return startContext.extendedContext;
 		} else {
 			throw new IllegalStateException("Could not parse module :" + file);
 		}
 	}
 
-	public static ParserRuleContext tryLLContent(String content) {
+	public  Select_definitionContextExt getSelectContext(File file) {
+		logger.info("trying to parse " + file);
+    String content = FileUtils.ReadFromFile(file);
+		LAParser parser = trySLLContent(content);
+		Select_definitionContext select_definitionContext = (Select_definitionContext)parser.select_definition();
+		if( select_definitionContext == null ){
+			parser = tryLLContent(content);
+			select_definitionContext = (Select_definitionContext)parser.select_definition();
+		}
+		if (select_definitionContext != null) {
+			return select_definitionContext.extendedContext;
+		} else {
+			throw new IllegalStateException("Could not parse module :" + file);
+		}
+	}
+
+	public LAParser tryLLContent(String content) {
 		LALexer lexer = new LALexer(new ANTLRInputStream(content));
 		//lexer.removeErrorListeners();
 		lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
@@ -66,15 +68,14 @@ public class LAFileParser {
 
 			parser.setBuildParseTree(true);
 			parser.setTokenStream(tokens);
-			ParserRuleContext tree = parser.start();
-			return tree;
+			return parser;
 		} catch (Exception e) {
 			logger.error("Error parsing content with LL strategy" + e);
 			return null;
 		}
 	}
 
-	public static ParserRuleContext trySLLContent(String content) {
+	public LAParser trySLLContent(String content) {
 		LALexer lexer = new LALexer(new ANTLRInputStream(content));
 		//lexer.removeErrorListeners();
 		lexer.addErrorListener(DescriptiveErrorListener.INSTANCE);
@@ -90,8 +91,7 @@ public class LAFileParser {
 			// parser.setErrorHandler(new ExceptionErrorStrategy());
 			parser.setBuildParseTree(true);
 			parser.setTokenStream(tokens);
-			ParserRuleContext tree = parser.start();
-			return tree;
+			return parser;
 		} catch (Exception e) {
 				logger.debug("Error parsing content with SLL strategy" + e);
 				return null;

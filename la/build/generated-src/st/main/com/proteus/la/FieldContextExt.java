@@ -46,8 +46,25 @@ public class FieldContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void PopulateSymbolTable(SymbolTable symbolTable){
-		symbolTable.put(getLatestContext().field_name().getText(), this);
+		String fieldName = getName();
+		symbolTable.put(fieldName, this);
 	}
 
+	public String getName(){
+		return  getLatestContext().field_name().extendedContext.getName();
+	}
+
+	public Long getStartIndex(){
+		return getLatestContext().field_range().extendedContext.getFieldStartIndex();
+	}
+
+	public Long getStopIndex(){
+		return getLatestContext().field_range().extendedContext.getFieldStopIndex();
+	}	
+
+	public Long getSize(){
+		assert getStopIndex() > getStartIndex() : "stop index should be greated than start index";
+		return getStopIndex() - getStartIndex() + 1;
+	}
 
 }

@@ -6,6 +6,7 @@ import com.proteus.framework.app.*;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
+import java.util.List;
 
 public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 
@@ -21,7 +22,6 @@ public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 	public Field_refrence_listContext getLatestContext(){
 		return (Field_refrence_listContext)super.getLatestContext();
 	}
-
 
   /*
    * Create a context for the given string  with extended context populated in that
@@ -43,4 +43,5 @@ public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
 }

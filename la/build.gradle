@@ -95,10 +95,6 @@ task GenerateExtendedClasses(type: JavaExec) {
     args = ['com.proteus.la', 'la', 'LAParser', 'LALexer', grammarFile.getAbsolutePath(), templateFile.getAbsolutePath(), directoryLocation.getAbsolutePath()]
 }
 
-
-
-
-
 sourceSets.main.java.srcDirs += ['build/generated-src/antlr/main/', 'build/generated-src/st/main']
 
 

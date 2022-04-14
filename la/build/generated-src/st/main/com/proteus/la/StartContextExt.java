@@ -11,7 +11,7 @@ public class StartContextExt extends AbstractBaseExtendedContext{
 
 	public StartContextExt(StartContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
+		//addToContexts(ctx);
 	}
 
 	/*
