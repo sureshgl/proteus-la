@@ -166,7 +166,7 @@ public class AddExtendedContextToParseRule extends ANTLRv4ParserBaseVisitor<Stri
 		updatedGrammar.append(name);
 		updatedGrammar.append("\n");
 		String camelCase = name.substring(0, 1).toUpperCase() + name.substring(1);
-		updatedGrammar.append("locals [ " + camelCase + "ContextExt extendedContext = new " + camelCase + "ContextExt(this) ]\n");
+		updatedGrammar.append("locals [ " + camelCase + "ContextExt extendedContext = null ]\n");
 		updatedGrammar.append(":");
 		visitRuleBlock(ctx.ruleBlock());
 		updatedGrammar.append(";");

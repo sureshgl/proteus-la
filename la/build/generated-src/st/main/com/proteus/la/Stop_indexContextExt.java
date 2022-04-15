@@ -12,7 +12,6 @@ public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 	private Long stop_index;
 	public Stop_indexContextExt(Stop_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		stop_index = 0L;
 	}
 
@@ -24,13 +23,12 @@ public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 		return (Stop_indexContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).stop_index();
+	public Stop_indexContext getContext(String str){
+		return (Stop_indexContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).stop_index());
 	}
 
 	@Override

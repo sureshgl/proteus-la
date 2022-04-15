@@ -19,13 +19,10 @@ import com.proteus.framework.ANTLRv4.ANTLRv4Parser.LabeledAltContext;
 import com.proteus.framework.ANTLRv4.ANTLRv4Parser.RuleSpecContext;
 import com.proteus.framework.ANTLRv4.ANTLRv4ParserBaseVisitor;
 
-import lombok.Getter;
 
 public class GrammarFile extends ANTLRv4ParserBaseVisitor<String> {
 
-	@Getter
 	private List<String> parserRules;
-	@Getter
 	private Map<String, String> altRules;
 	private String parent;
 	private Boolean hasAltRules;
@@ -49,6 +46,14 @@ public class GrammarFile extends ANTLRv4ParserBaseVisitor<String> {
 				visitParserRuleSpec(ruleSpecContext.parserRuleSpec());
 			}
 		}
+	}
+
+	public List<String> getParserRules(){
+		return parserRules;
+	}
+
+	public  Map<String, String>  getAltRules(){
+		return this.altRules;
 	}
 
 	@Override

@@ -11,7 +11,6 @@ public class Shift_addressContextExt extends AbstractBaseExtendedContext{
 
 	public Shift_addressContextExt(Shift_addressContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Shift_addressContextExt extends AbstractBaseExtendedContext{
 		return (Shift_addressContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).shift_address();
+	public Shift_addressContext getContext(String str){
+		return (Shift_addressContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).shift_address());
 	}
 
 	@Override

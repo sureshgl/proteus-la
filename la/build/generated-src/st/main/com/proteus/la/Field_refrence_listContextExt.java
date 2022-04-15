@@ -6,13 +6,11 @@ import com.proteus.framework.app.*;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
-import java.util.List;
 
 public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 
 	public Field_refrence_listContextExt(Field_refrence_listContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -23,12 +21,12 @@ public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 		return (Field_refrence_listContext)super.getLatestContext();
 	}
 
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).field_refrence_list();
+	public Field_refrence_listContext getContext(String str){
+		return (Field_refrence_listContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).field_refrence_list());
 	}
 
 	@Override
@@ -43,5 +41,4 @@ public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
-
 }

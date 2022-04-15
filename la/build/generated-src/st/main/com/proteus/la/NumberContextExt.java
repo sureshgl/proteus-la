@@ -14,7 +14,6 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 	private Long number;
 	public NumberContextExt(NumberContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		number = 0L;
 	}
 
@@ -26,13 +25,12 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 		return (NumberContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).number();
+	public NumberContext getContext(String str){
+		return (NumberContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).number());
 	}
 
 	@Override

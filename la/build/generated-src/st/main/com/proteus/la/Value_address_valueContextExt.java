@@ -11,7 +11,6 @@ public class Value_address_valueContextExt extends AbstractBaseExtendedContext{
 
 	public Value_address_valueContextExt(Value_address_valueContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Value_address_valueContextExt extends AbstractBaseExtendedContext{
 		return (Value_address_valueContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).value_address_value();
+	public Value_address_valueContext getContext(String str){
+		return (Value_address_valueContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).value_address_value());
 	}
 
 	@Override

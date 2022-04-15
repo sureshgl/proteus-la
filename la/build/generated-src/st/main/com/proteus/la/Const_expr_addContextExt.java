@@ -20,9 +20,12 @@ public class Const_expr_addContextExt extends Constant_expressionContextExt{
 		return (Const_expr_addContext)super.getLatestContext();
 	}
 
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).constant_expression();
+	public Const_expr_addContext getContext(String str){
+		return (Const_expr_addContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).constant_expression());
 	}
 
 	@Override

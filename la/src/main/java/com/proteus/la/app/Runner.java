@@ -1,19 +1,15 @@
 package com.proteus.la.app;
 
-import java.util.List;
 import java.io.File;
 import java.io.FileNotFoundException;
 
-import com.proteus.framework.DescriptiveErrorListener;
-import com.proteus.framework.utils.FileUtils;
+import com.proteus.la.LAParserPopulateExtendedContextVisitor;
 import com.proteus.la.Select_definitionContextExt;
 import com.proteus.la.StartContextExt;
-import com.proteus.la.ANTLRv4.LAParser.Select_definitionContext;
-import com.proteus.la.ANTLRv4.LAParser.StartContext;
-import com.proteus.la.app.LAFileParser;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
+import com.proteus.la.ANTLRv4.LAParser.*;
+import com.proteus.la.ANTLRv4.LAParser;
 
 public class Runner {
 
@@ -33,16 +29,19 @@ public class Runner {
   public void run() throws FileNotFoundException{
       File specFile = new File(specFilePath);
       if(specFile.exists()){
-        StartContextExt startContextExt = laFileParser.getStartContext(specFile);
-        System.out.println(startContextExt.getFormattedText());
+        StartContext startContext = laFileParser.getStartContext(specFile);
+        new LAParserPopulateExtendedContextVisitor().visit(startContext);
+        
+        System.out.println(startContext.extendedContext.getFormattedText());
       }
       else{
         throw new FileNotFoundException("Input file " + specFilePath + "not found");
       }
       File selectFile = new File(selectFilePath);
       if(selectFile.exists()){
-        Select_definitionContextExt select_definitionContextExt = laFileParser.getSelectContext(selectFile);
-        System.out.println(select_definitionContextExt.getFormattedText());
+        Select_definitionContext select_definitionContext = laFileParser.getSelectContext(selectFile);
+        new LAParserPopulateExtendedContextVisitor().visit(select_definitionContext);
+        System.out.println(select_definitionContext.extendedContext.getFormattedText());
       }
       else{
         throw new FileNotFoundException("Select file " + selectFilePath + "not found");
@@ -51,22 +50,22 @@ public class Runner {
   }
 
 
-  public StartContextExt getStartContext(String inputFilePath) throws FileNotFoundException{
+  public StartContext getStartContext(String inputFilePath) throws FileNotFoundException{
     File inputFile = new File(inputFilePath);
     if(inputFile.exists()){
-      StartContextExt startContextExt = laFileParser.getStartContext(inputFile);
-      return startContextExt;
+      StartContext startContext = laFileParser.getStartContext(inputFile);
+      return startContext;
     }
     else{
       throw new FileNotFoundException("Input file " + inputFilePath + "not found");
     }
   }
 
-  public Select_definitionContextExt getSelectContext(String inputFilePath) throws FileNotFoundException{
+  public Select_definitionContext getSelectContext(String inputFilePath) throws FileNotFoundException{
     File inputFile = new File(inputFilePath);
     if(inputFile.exists()){
-      Select_definitionContextExt select_definitionContextExt = laFileParser.getSelectContext(inputFile);
-      return select_definitionContextExt;
+      Select_definitionContext select_definitionContext = laFileParser.getSelectContext(inputFile);
+      return select_definitionContext;
     }
     else{
       throw new FileNotFoundException("Input file " + inputFilePath + "not found");
@@ -74,8 +73,8 @@ public class Runner {
   }
 
   public void doSymanticCheck(String inputFilePath) throws FileNotFoundException{
-    StartContextExt startContextExt = getStartContext(inputFilePath);
-    startContextExt.SemanticCheck();
+    StartContext startContext = getStartContext(inputFilePath);
+    startContext.extendedContext.SemanticCheck();
   }
 
   public static void main(String[] args) throws FileNotFoundException{

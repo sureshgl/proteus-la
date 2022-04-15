@@ -54,7 +54,8 @@ dependencies {
 }
 
 task AddExtendedContextToParseRule(type: JavaExec) {
-    classpath = sourceSets.main.runtimeClasspath
+    //classpath = sourceSets.main.runtimeClasspath
+    classpath = sourceSets.main.compileClasspath
     mainClass = 'com.proteus.framework.AddExtendedContextToParseRule'
     File file = new File(projectDir, 'src/main/antlr/com/proteus/la/ANTLRv4/LAParser.g4')
     // arguments to pass to the application
@@ -77,6 +78,16 @@ generateGrammarSource {
 task GenerateExtendedContextVisitor(type: JavaExec) {
     classpath = sourceSets.main.compileClasspath
     mainClass = 'com.proteus.framework.ExtendedContextVisitorGenerator'
+    File grammarFile = new File(projectDir, 'src/main/antlr/com/proteus/la/ANTLRv4/LAParser.g4')
+    File templateFile = new File(projectDir, 'src/main/resources/ClassContext.stg')
+    File directoryLocation = new File(projectDir, 'build/generated-src/st/main/com/proteus/la')  //framework  expects the file to be here.
+    // arguments to pass to the application
+    args = [grammarFile.getAbsolutePath(), templateFile.getAbsolutePath(), directoryLocation.getAbsolutePath(), 'com.proteus.la', 'la', 'LAParser']
+}
+
+task GeneratePopulateExtendedContextVisitor(type: JavaExec) {
+    classpath = sourceSets.main.compileClasspath
+    mainClass = 'com.proteus.framework.PopulateExtendedContextVisitorGenerator'
     File grammarFile = new File(projectDir, 'src/main/antlr/com/proteus/la/ANTLRv4/LAParser.g4')
     File templateFile = new File(projectDir, 'src/main/resources/ClassContext.stg')
     File directoryLocation = new File(projectDir, 'build/generated-src/st/main/com/proteus/la')  //framework  expects the file to be here.

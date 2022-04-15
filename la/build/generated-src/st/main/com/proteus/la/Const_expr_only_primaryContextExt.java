@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
+
 public class Const_expr_only_primaryContextExt extends Constant_expressionContextExt{
 
 	public Const_expr_only_primaryContextExt(Const_expr_only_primaryContext ctx) {
@@ -18,9 +19,12 @@ public class Const_expr_only_primaryContextExt extends Constant_expressionContex
 		return (Const_expr_only_primaryContext)super.getLatestContext();
 	}
 
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).constant_expression();
+	public Const_expr_only_primaryContext getContext(String str){
+		return (Const_expr_only_primaryContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).constant_expression());
 	}
 
 	@Override

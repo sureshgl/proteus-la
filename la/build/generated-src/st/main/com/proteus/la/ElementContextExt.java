@@ -13,7 +13,6 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 
 	public ElementContextExt(ElementContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		localSymbolTable = new SymbolTable();
 	}
 
@@ -25,13 +24,12 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 		return (ElementContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).element();
+	public ElementContext getContext(String str){
+		return (ElementContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).element());
 	}
 
 	@Override

@@ -1,15 +1,7 @@
 package com.proteus.framework.app;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.Parser;
@@ -30,7 +22,6 @@ import com.proteus.framework.app.IGetFormattedText;
   This is a base Application implementing a feature "GetFormattedText".
 */
 
-@Data
 public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractBaseExtendedContext.class);
 
@@ -51,8 +42,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	 * on this context. Every transformation should see the same list of contexts.
 	 * This way we are flattening the depth of the transformations.
 	 */
-	@Setter(AccessLevel.NONE)
-	protected List<ParserRuleContext> contexts;  
+	private List<ParserRuleContext> contexts;  
 	protected ParserRuleContext parent; //TODO fix the parent logic.
 
 	//abstract methods
@@ -79,7 +69,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 			return ctx;
 		}
 		else{
-			return extendedContextVisitor.visit(ctx).contexts.get(contexts.size() -1);
+			return contexts.get(contexts.size() -1);
 		}
 	}
 
@@ -110,12 +100,11 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-	@Data
 	protected class Params{
 		public Params( ParserRuleContext ctx, StringBuilder sb)
 		{
 			this.context = ctx;
-			beginingOfAlignemtText = 0;
+			beginingOfAlignmentText = 0;
 			input = ctx.start.getInputStream();
 			this.stringBuilder = sb;
 		}
@@ -123,7 +112,26 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		private CharStream input;
 		private StringBuilder stringBuilder;
 		//private int endOfAlignmentText;
-		private int beginingOfAlignemtText;
+		private int beginingOfAlignmentText;
+
+		public ParserRuleContext getContext(){
+			return this.context;
+		}
+		public void setContext(ParserRuleContext context){
+			this.context = context;
+		}
+		public CharStream getInput(){
+			return this.input;
+		}
+		public StringBuilder getStringBuilder(){
+			return this.stringBuilder;
+		}
+		public int getBeginingOfAlignmentText(){
+			return this.beginingOfAlignmentText;
+		}
+		public void setBeginingOfAlignmentText(int value){
+			this.beginingOfAlignmentText = value;
+		}
 
 		@Override
 		public String toString()
@@ -132,7 +140,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 
 			sb.append("Context = " + context.getClass().getSimpleName() +"\n"+ context.getText()); sb.append("\n");
 			sb.append("Text = "+ stringBuilder.toString()); sb.append("\n");
-			sb.append("start ="+beginingOfAlignemtText); sb.append("\n");
+			sb.append("start ="+beginingOfAlignmentText); sb.append("\n");
 			//sb.append("end = "+endOfAlignmentText);sb.append("\n");
 			return sb.toString();
 		}
@@ -144,7 +152,7 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	public String getFormattedText(){
 		StringBuilder sb = new StringBuilder();
 		Params params = new Params(getLatestContext(), sb);
-		params.setBeginingOfAlignemtText(getLatestContext().start.getStartIndex());
+		params.setBeginingOfAlignmentText(getLatestContext().start.getStartIndex());
 		getFormattedText(params);
 		//logger.debug("output =\n" + sb.toString());
 		return sb.toString();
@@ -176,9 +184,9 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		if ( getLatestContext() == null)
 		{
 			//The item is removed during the transformation, hence skip its contents.
-			String alignmentText = params.getInput().getText(new Interval(params.getBeginingOfAlignemtText(), params.getContext().start.getStartIndex()-1));
+			String alignmentText = params.getInput().getText(new Interval(params.getBeginingOfAlignmentText(), params.getContext().start.getStartIndex()-1));
 			params.getStringBuilder().append(alignmentText);
-			params.setBeginingOfAlignemtText(params.getContext().stop.getStopIndex() + 1); 
+			params.setBeginingOfAlignmentText(params.getContext().stop.getStopIndex() + 1); 
 			return null;
 		}
 		if (getLatestContext().start.getInputStream() != params.getContext().start.getInputStream())
@@ -186,19 +194,19 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 			/*
 			 * advance the  begining of  alignment text, as we are going to consider 'mostRecentContext' in its place.
 			 */
-			if ( params.beginingOfAlignemtText  <  params.getContext().start.getStartIndex())
+			if ( params.beginingOfAlignmentText  <  params.getContext().start.getStartIndex())
 			{
-				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignemtText, params.getContext().start.getStartIndex()-1));
+				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignmentText, params.getContext().start.getStartIndex()-1));
 				params.getStringBuilder().append(alignmentText);
 			}
-			params.setBeginingOfAlignemtText(params.getContext().stop.getStopIndex() + 1); 
+			params.setBeginingOfAlignmentText(params.getContext().stop.getStopIndex() + 1); 
 			return new Params(getLatestContext(),params.getStringBuilder());
 		}
 		else
 		{
 			if (getLatestContext().parent == null)
 			{
-				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignemtText, params.getContext().start.getInputStream().size()));
+				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignmentText, params.getContext().start.getInputStream().size()));
 				params.getStringBuilder().append(alignmentText);
 			}
 			params.setContext(getLatestContext());
@@ -210,16 +218,16 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
   private void printTerminalNode(TerminalNode node,Params params){
 		CharStream input = params.getContext().start.getInputStream();
 		if(node.getText().equals("<EOF>")){
-			String end = input.getText(new Interval(params.getBeginingOfAlignemtText(),input.size()));
+			String end = input.getText(new Interval(params.getBeginingOfAlignmentText(),input.size()));
 			params.getStringBuilder().append(end);
 		} else {
-			if(params.getBeginingOfAlignemtText() < node.getSymbol().getStartIndex()){
-				Interval alignmentTextInterval = new Interval(params.getBeginingOfAlignemtText(),node.getSymbol().getStartIndex()-1);
+			if(params.getBeginingOfAlignmentText() < node.getSymbol().getStartIndex()){
+				Interval alignmentTextInterval = new Interval(params.getBeginingOfAlignmentText(),node.getSymbol().getStartIndex()-1);
 				String alignmentText = input.getText(alignmentTextInterval);
 				params.getStringBuilder().append(alignmentText);
 			}
 			params.getStringBuilder().append(node.getText());
-			params.setBeginingOfAlignemtText(node.getSymbol().getStopIndex()+1);
+			params.setBeginingOfAlignmentText(node.getSymbol().getStopIndex()+1);
 		}
 	}
 

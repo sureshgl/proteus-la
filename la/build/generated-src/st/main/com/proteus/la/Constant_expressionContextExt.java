@@ -1,34 +1,14 @@
 package com.proteus.la;
 
 import com.proteus.framework.app.*;
-import org.antlr.v4.runtime.ParserRuleContext;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
-public class Constant_expressionContextExt extends AbstractBaseExtendedContext{
+public abstract class Constant_expressionContextExt extends AbstractBaseExtendedContext{
 
 	public Constant_expressionContextExt(Constant_expressionContext ctx) {
 		super("la", new LAParser(null), new LALexer(null), ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
-
-	@Override
-	public Constant_expressionContext getLatestContext(){
-		throw new UnsupportedOperationException("Alt rule should not call the base class method");
-	}
-
-	@Override
-	public ParserRuleContext getContext(String str){
-		throw new UnsupportedOperationException("Alt rule should not call the base class method");
-	}
-
-	@Override
-	public void setContext(ParserRuleContext ctx){
-		throw new UnsupportedOperationException("Alt rule should not call the base class method");
-	}
-
-	public Long eval() throws Exception { 
-		throw new NumberFormatException(" Something very bad happened");
-	} 
+	public abstract Long eval() throws Exception;
 }

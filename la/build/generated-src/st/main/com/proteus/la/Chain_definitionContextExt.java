@@ -12,7 +12,6 @@ public class Chain_definitionContextExt extends AbstractBaseExtendedContext{
 	private Long currLoc;
 	public Chain_definitionContextExt(Chain_definitionContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		localSymbolTable = new SymbolTable();
 		currLoc = 0L;
 	}
@@ -25,13 +24,12 @@ public class Chain_definitionContextExt extends AbstractBaseExtendedContext{
 		return (Chain_definitionContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).chain_definition();
+	public Chain_definitionContext getContext(String str){
+		return (Chain_definitionContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).chain_definition());
 	}
 
 	@Override

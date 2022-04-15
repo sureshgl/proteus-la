@@ -11,7 +11,6 @@ public class Chain_nameContextExt extends AbstractBaseExtendedContext{
 
 	public Chain_nameContextExt(Chain_nameContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Chain_nameContextExt extends AbstractBaseExtendedContext{
 		return (Chain_nameContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).chain_name();
+	public Chain_nameContext getContext(String str){
+		return (Chain_nameContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).chain_name());
 	}
 
 	@Override

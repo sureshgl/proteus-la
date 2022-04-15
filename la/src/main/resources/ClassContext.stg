@@ -13,7 +13,6 @@ public class <className>Ext extends AbstractBaseExtendedContext{
 
 	public <className>Ext(<className> ctx) {
 		super("<grammarName>", new <parserName>(null), new <lexerName>(null),  ctx, new <parserName>ExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -24,13 +23,12 @@ public class <className>Ext extends AbstractBaseExtendedContext{
 		return (<className>)super.getLatestContext();
 	}
 
-	
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((<parserName>)getParser(str)).<ruleName>();
+	public <className> getContext(String str){
+		return (<className>)new <parserName>PopulateExtendedContextVisitor().visit(((<parserName>)getParser(str)).<ruleName>());
 	}
 	
 	@Override
@@ -52,31 +50,14 @@ contextAltParentClassSkel(packageName, grammarName, parserName, lexerName, class
 package <packageName>;
 
 import com.proteus.framework.app.*;
-import org.antlr.v4.runtime.ParserRuleContext;
 import com.proteus.<grammarName>.ANTLRv4.<lexerName>;
 import com.proteus.<grammarName>.ANTLRv4.<parserName>;
 import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
 
-public class <className>Ext extends AbstractBaseExtendedContext{
+public abstract class <className>Ext extends AbstractBaseExtendedContext{
 
 	public <className>Ext(<className> ctx) {
 		super("<grammarName>", new <parserName>(null), new <lexerName>(null), ctx, new <parserName>ExtendedContextVisitor());
-		addToContexts(ctx);
-	}
-
-	@Override
-	public <className> getLatestContext(){
-		throw new UnsupportedOperationException("Alt rule should not call the base class method");
-	}
-	
-	@Override
-	public ParserRuleContext getContext(String str){
-		throw new UnsupportedOperationException("Alt rule should not call the base class method");
-	}
-	
-	@Override
-	public void setContext(ParserRuleContext ctx){
-		throw new UnsupportedOperationException("Alt rule should not call the base class method");
 	}
 
 }
@@ -89,6 +70,7 @@ package <packageName>;
 import org.antlr.v4.runtime.ParserRuleContext;
 import com.proteus.<grammarName>.ANTLRv4.<parserName>;
 import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
+
 
 public class <className>Ext extends <parentClassName>Ext{
 
@@ -104,9 +86,12 @@ public class <className>Ext extends <parentClassName>Ext{
 		return (<className>)super.getLatestContext();
 	}
 	
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((<parserName>)getParser(str)).<ruleName>();
+	public <className> getContext(String str){
+		return (<className>)new <parserName>PopulateExtendedContextVisitor().visit(((<parserName>)getParser(str)).<ruleName>());
 	}
 	
 	@Override
@@ -128,12 +113,11 @@ public class <className>Ext extends <parentClassName>Ext{
 extendedContextClassVisitorSkel(packageName, grammarName, parserName, methods)::=<<
 package <packageName>;
 
-import org.antlr.v4.runtime.ParserRuleContext;
 import com.proteus.framework.app.*;
 import com.proteus.framework.IExtendedContextVisitor;
 import com.proteus.<grammarName>.ANTLRv4.<parserName>BaseVisitor;
 import com.proteus.<grammarName>.ANTLRv4.<parserName>;
-import com.proteus.<grammarName>.ANTLRv4.<parserName>.*;
+import com.proteus.<grammarName>.*;
 
 public class <parserName>ExtendedContextVisitor extends <parserName>BaseVisitor\<AbstractBaseExtendedContext> implements IExtendedContextVisitor {
 	<methods>
@@ -144,7 +128,30 @@ extendedContextClassVisitorMethodSkel(ruleName, ruleContextName, parserName)::=<
 
 @Override 
 public AbstractBaseExtendedContext visit<ruleName>(<parserName>.<ruleContextName> ctx) {
-	return ctx.extendedContext.getLatestContext().extendedContext;
+	return ((<ruleContextName>Ext)ctx.extendedContext).getLatestContext().extendedContext;
+}
+
+>>
+
+populateExtendedContextClassVisitorSkel(packageName, grammarName, parserName, methods)::=<<
+package <packageName>;
+
+import org.antlr.v4.runtime.ParserRuleContext;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>BaseVisitor;
+import com.proteus.<grammarName>.ANTLRv4.<parserName>;
+
+public class <parserName>PopulateExtendedContextVisitor extends <parserName>BaseVisitor\<ParserRuleContext> {
+	<methods>
+}
+>>
+
+populateExtendedContextClassVisitorMethodSkel(ruleName, ruleContextName, parserName)::=<<
+
+@Override 
+public ParserRuleContext visit<ruleName>(<parserName>.<ruleContextName> ctx) {
+	super.visit<ruleName>(ctx);
+	ctx.extendedContext = new <ruleContextName>Ext(ctx);
+	return ctx;
 }
 
 >>

@@ -11,7 +11,6 @@ public class Variable_nameContextExt extends AbstractBaseExtendedContext{
 
 	public Variable_nameContextExt(Variable_nameContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Variable_nameContextExt extends AbstractBaseExtendedContext{
 		return (Variable_nameContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).variable_name();
+	public Variable_nameContext getContext(String str){
+		return (Variable_nameContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).variable_name());
 	}
 
 	@Override

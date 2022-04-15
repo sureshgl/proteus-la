@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Throwables;
 import com.google.common.io.Files;
-import com.proteus.framework.utils.Utils.fn1;
 
 public class FileUtils {
 
@@ -60,15 +59,6 @@ public class FileUtils {
 		return files;
 	}
 
-	public static List<File> allFilesInDir(String dirName,final String extension){
-		List<File> files = allFilesInDir(dirName);
-		return Utils.filter(new fn1<Boolean, File>() {
-			@Override
-			public Boolean invoke(File file) {
-				return extension == null ? true : file.getName().endsWith(extension);
-			}
-		}, files);
-	}
 
 	public static List<File> alldirsInDir(String dirName){
 		File dir = new File(dirName);

@@ -11,7 +11,6 @@ public class Element_number_indexContextExt extends AbstractBaseExtendedContext{
 
 	public Element_number_indexContextExt(Element_number_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Element_number_indexContextExt extends AbstractBaseExtendedContext{
 		return (Element_number_indexContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).element_number_index();
+	public Element_number_indexContext getContext(String str){
+		return (Element_number_indexContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).element_number_index());
 	}
 
 	@Override

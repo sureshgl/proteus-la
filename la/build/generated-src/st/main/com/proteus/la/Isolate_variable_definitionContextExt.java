@@ -11,7 +11,6 @@ public class Isolate_variable_definitionContextExt extends AbstractBaseExtendedC
 
 	public Isolate_variable_definitionContextExt(Isolate_variable_definitionContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Isolate_variable_definitionContextExt extends AbstractBaseExtendedC
 		return (Isolate_variable_definitionContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).isolate_variable_definition();
+	public Isolate_variable_definitionContext getContext(String str){
+		return (Isolate_variable_definitionContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).isolate_variable_definition());
 	}
 
 	@Override

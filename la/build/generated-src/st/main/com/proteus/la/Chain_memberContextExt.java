@@ -11,7 +11,6 @@ public class Chain_memberContextExt extends AbstractBaseExtendedContext{
 
 	public Chain_memberContextExt(Chain_memberContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Chain_memberContextExt extends AbstractBaseExtendedContext{
 		return (Chain_memberContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).chain_member();
+	public Chain_memberContext getContext(String str){
+		return (Chain_memberContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).chain_member());
 	}
 
 	@Override

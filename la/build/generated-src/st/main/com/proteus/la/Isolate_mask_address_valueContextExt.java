@@ -11,7 +11,6 @@ public class Isolate_mask_address_valueContextExt extends AbstractBaseExtendedCo
 
 	public Isolate_mask_address_valueContextExt(Isolate_mask_address_valueContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Isolate_mask_address_valueContextExt extends AbstractBaseExtendedCo
 		return (Isolate_mask_address_valueContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).isolate_mask_address_value();
+	public Isolate_mask_address_valueContext getContext(String str){
+		return (Isolate_mask_address_valueContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).isolate_mask_address_value());
 	}
 
 	@Override

@@ -13,7 +13,6 @@ public class Start_indexContextExt extends AbstractBaseExtendedContext{
 
 	public Start_indexContextExt(Start_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		start_index = 0L;
 	}
 
@@ -25,13 +24,12 @@ public class Start_indexContextExt extends AbstractBaseExtendedContext{
 		return (Start_indexContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).start_index();
+	public Start_indexContext getContext(String str){
+		return (Start_indexContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).start_index());
 	}
 
 	@Override

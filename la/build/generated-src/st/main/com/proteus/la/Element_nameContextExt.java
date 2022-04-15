@@ -11,7 +11,6 @@ public class Element_nameContextExt extends AbstractBaseExtendedContext{
 
 	public Element_nameContextExt(Element_nameContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Element_nameContextExt extends AbstractBaseExtendedContext{
 		return (Element_nameContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).element_name();
+	public Element_nameContext getContext(String str){
+		return (Element_nameContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).element_name());
 	}
 
 	@Override

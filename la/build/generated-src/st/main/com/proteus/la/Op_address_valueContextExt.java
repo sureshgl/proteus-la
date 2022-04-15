@@ -11,7 +11,6 @@ public class Op_address_valueContextExt extends AbstractBaseExtendedContext{
 
 	public Op_address_valueContextExt(Op_address_valueContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Op_address_valueContextExt extends AbstractBaseExtendedContext{
 		return (Op_address_valueContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).op_address_value();
+	public Op_address_valueContext getContext(String str){
+		return (Op_address_valueContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).op_address_value());
 	}
 
 	@Override

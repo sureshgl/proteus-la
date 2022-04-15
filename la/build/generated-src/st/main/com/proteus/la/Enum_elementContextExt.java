@@ -11,7 +11,6 @@ public class Enum_elementContextExt extends AbstractBaseExtendedContext{
 
 	public Enum_elementContextExt(Enum_elementContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Enum_elementContextExt extends AbstractBaseExtendedContext{
 		return (Enum_elementContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).enum_element();
+	public Enum_elementContext getContext(String str){
+		return (Enum_elementContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).enum_element());
 	}
 
 	@Override

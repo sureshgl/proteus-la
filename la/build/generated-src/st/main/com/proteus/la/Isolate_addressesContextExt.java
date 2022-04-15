@@ -11,7 +11,6 @@ public class Isolate_addressesContextExt extends AbstractBaseExtendedContext{
 
 	public Isolate_addressesContextExt(Isolate_addressesContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Isolate_addressesContextExt extends AbstractBaseExtendedContext{
 		return (Isolate_addressesContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).isolate_addresses();
+	public Isolate_addressesContext getContext(String str){
+		return (Isolate_addressesContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).isolate_addresses());
 	}
 
 	@Override

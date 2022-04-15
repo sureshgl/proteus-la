@@ -11,7 +11,6 @@ public class Group_memberContextExt extends AbstractBaseExtendedContext{
 
 	public Group_memberContextExt(Group_memberContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Group_memberContextExt extends AbstractBaseExtendedContext{
 		return (Group_memberContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).group_member();
+	public Group_memberContext getContext(String str){
+		return (Group_memberContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).group_member());
 	}
 
 	@Override

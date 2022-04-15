@@ -7,17 +7,10 @@ import java.util.Set;
 
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupFile;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import com.proteus.framework.utils.FileUtils;
 import com.proteus.framework.GrammarFile;
-
 import java.lang.IllegalArgumentException;
 
-@Data
-@AllArgsConstructor
 public class ExtendedContextClassGenerator {
 	private String packageName;
 	private String grammarName;
@@ -29,6 +22,16 @@ public class ExtendedContextClassGenerator {
   private final String contextClassSkeltonName = "contextClassSkel";
   private final String altContextClassSkeltonName = "contextAltClassSkel";
 
+	public ExtendedContextClassGenerator(String packageName, String grammarName, String parserName, 
+	String lexerName, String grammarFilePath, String templateFilePath, String directoryLocation){
+		this.packageName = packageName;
+		this.grammarName = grammarName;
+		this.parserName = parserName;
+		this.lexerName = lexerName;
+		this.grammarFilePath = grammarFilePath;
+		this.templateFilePath = templateFilePath;
+		this.directoryLocation = directoryLocation;
+	}
 
 	public void generateClasses() throws Exception {
 		int count = 0;

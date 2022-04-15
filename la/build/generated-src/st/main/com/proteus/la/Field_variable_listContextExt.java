@@ -38,12 +38,11 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 
 	public Field_variable_listContextExt(Field_variable_listContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		fieldStart = Long.MAX_VALUE;
 		fieldEnd = Long.MIN_VALUE;
 	}
 
- /*
+	/*
 	* Create a context for the given string  with extended context populated in that
 	*/
 	@Override
@@ -51,13 +50,12 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 		return (Field_variable_listContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).field_variable_list();
+	public Field_variable_listContext getContext(String str){
+		return (Field_variable_listContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).field_variable_list());
 	}
 
 	@Override

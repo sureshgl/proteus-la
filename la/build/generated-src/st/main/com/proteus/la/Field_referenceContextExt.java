@@ -12,7 +12,6 @@ public class Field_referenceContextExt extends AbstractBaseExtendedContext{
 
 	public Field_referenceContextExt(Field_referenceContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -23,12 +22,12 @@ public class Field_referenceContextExt extends AbstractBaseExtendedContext{
 		return (Field_referenceContext)super.getLatestContext();
 	}
 
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).field_reference();
+	public Field_referenceContext getContext(String str){
+		return (Field_referenceContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).field_reference());
 	}
 
 	@Override

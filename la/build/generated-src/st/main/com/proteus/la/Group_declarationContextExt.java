@@ -13,7 +13,6 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 
 	public Group_declarationContextExt(Group_declarationContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 		group_definitionContextExt = null;
 		localSymbolTable = new SymbolTable();
 	}
@@ -26,13 +25,12 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 		return (Group_declarationContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).group_declaration();
+	public Group_declarationContext getContext(String str){
+		return (Group_declarationContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).group_declaration());
 	}
 
 	@Override

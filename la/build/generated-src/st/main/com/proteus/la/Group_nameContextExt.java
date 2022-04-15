@@ -11,7 +11,6 @@ public class Group_nameContextExt extends AbstractBaseExtendedContext{
 
 	public Group_nameContextExt(Group_nameContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Group_nameContextExt extends AbstractBaseExtendedContext{
 		return (Group_nameContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).group_name();
+	public Group_nameContext getContext(String str){
+		return (Group_nameContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).group_name());
 	}
 
 	@Override

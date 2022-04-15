@@ -11,7 +11,6 @@ public class Chain_number_indexContextExt extends AbstractBaseExtendedContext{
 
 	public Chain_number_indexContextExt(Chain_number_indexContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Chain_number_indexContextExt extends AbstractBaseExtendedContext{
 		return (Chain_number_indexContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).chain_number_index();
+	public Chain_number_indexContext getContext(String str){
+		return (Chain_number_indexContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).chain_number_index());
 	}
 
 	@Override

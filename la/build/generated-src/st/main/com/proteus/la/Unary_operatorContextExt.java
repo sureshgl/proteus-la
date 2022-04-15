@@ -11,7 +11,6 @@ public class Unary_operatorContextExt extends AbstractBaseExtendedContext{
 
 	public Unary_operatorContextExt(Unary_operatorContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Unary_operatorContextExt extends AbstractBaseExtendedContext{
 		return (Unary_operatorContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).unary_operator();
+	public Unary_operatorContext getContext(String str){
+		return (Unary_operatorContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).unary_operator());
 	}
 
 	@Override

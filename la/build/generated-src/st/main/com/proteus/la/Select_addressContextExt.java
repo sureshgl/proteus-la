@@ -11,7 +11,6 @@ public class Select_addressContextExt extends AbstractBaseExtendedContext{
 
 	public Select_addressContextExt(Select_addressContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class Select_addressContextExt extends AbstractBaseExtendedContext{
 		return (Select_addressContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).select_address();
+	public Select_addressContext getContext(String str){
+		return (Select_addressContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).select_address());
 	}
 
 	@Override

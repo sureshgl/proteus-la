@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.proteus.framework.utils.FileUtils;
-import com.proteus.la.*;
 import com.proteus.la.ANTLRv4.LAParser.*;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser;
@@ -20,7 +19,7 @@ public class LAFileParser {
 
 	private static final Logger logger = LoggerFactory.getLogger(LAFileParser.class);
 
-	public  StartContextExt getStartContext(File file) {
+	public  StartContext getStartContext(File file) {
 		logger.info("trying to parse " + file);
     String content = FileUtils.ReadFromFile(file);
 		LAParser parser = trySLLContent(content);
@@ -30,13 +29,13 @@ public class LAFileParser {
 			startContext = (StartContext)parser.start();
 		}
 		if (startContext != null) {
-			return startContext.extendedContext;
+			return startContext;
 		} else {
 			throw new IllegalStateException("Could not parse module :" + file);
 		}
 	}
 
-	public  Select_definitionContextExt getSelectContext(File file) {
+	public  Select_definitionContext getSelectContext(File file) {
 		logger.info("trying to parse " + file);
     String content = FileUtils.ReadFromFile(file);
 		LAParser parser = trySLLContent(content);
@@ -46,7 +45,7 @@ public class LAFileParser {
 			select_definitionContext = (Select_definitionContext)parser.select_definition();
 		}
 		if (select_definitionContext != null) {
-			return select_definitionContext.extendedContext;
+			return select_definitionContext;
 		} else {
 			throw new IllegalStateException("Could not parse module :" + file);
 		}

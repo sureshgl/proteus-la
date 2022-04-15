@@ -11,7 +11,6 @@ public class StartContextExt extends AbstractBaseExtendedContext{
 
 	public StartContextExt(StartContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		//addToContexts(ctx);
 	}
 
 	/*
@@ -22,13 +21,12 @@ public class StartContextExt extends AbstractBaseExtendedContext{
 		return (StartContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).start();
+	public StartContext getContext(String str){
+		return (StartContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).start());
 	}
 
 	@Override

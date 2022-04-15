@@ -15,7 +15,6 @@ public class Field_rangeContextExt extends AbstractBaseExtendedContext{
 
 	public Field_rangeContextExt(Field_rangeContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
-		addToContexts(ctx);
 	}
 
 	/*
@@ -26,13 +25,12 @@ public class Field_rangeContextExt extends AbstractBaseExtendedContext{
 		return (Field_rangeContext)super.getLatestContext();
 	}
 
-
-  /*
-   * Create a context for the given string  with extended context populated in that
-   */
+	/*
+	* Create a context for the given string  with extended context populated in that
+	*/
 	@Override
-	public ParserRuleContext getContext(String str){
-		return ((LAParser)getParser(str)).field_range();
+	public Field_rangeContext getContext(String str){
+		return (Field_rangeContext)new LAParserPopulateExtendedContextVisitor().visit(((LAParser)getParser(str)).field_range());
 	}
 
 	@Override
