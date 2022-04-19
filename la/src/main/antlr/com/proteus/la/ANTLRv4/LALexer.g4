@@ -6,7 +6,7 @@ package com.proteus.la.ANTLRv4;
 import com.proteus.la.*;
 }
 
-
+ISOLATE : 'isolate';
 ISOLATE_ADDRESSES : 'isolate_addresses';
 VARIABLE : 'variable';
 MASK_ADDR : 'MASK_ADDR';

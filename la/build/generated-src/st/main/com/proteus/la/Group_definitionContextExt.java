@@ -11,6 +11,7 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 
 	private ElementContextExt selectedElement;
 	private Long shiftCount;
+	private Long mask;
 	private Boolean refered = false;
 
 	public Group_definitionContextExt(Group_definitionContext ctx) {
@@ -18,6 +19,7 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 		localSymbolTable = new SymbolTable();
 		selectedElement = null;
 		shiftCount = -1L;
+		mask = 0L;
 	}
 
 	/*
@@ -62,11 +64,21 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 	public Boolean isRefered(){
 		return this.refered;
 	}
+
+	public void setMask(Long mask){
+		this.mask = mask;
+	}
+
+	public Long getMask(){
+		return this.mask;
+	}
+
 	public void setSelectedElement(ElementContextExt element)
 	{
 		this.refered = true;
 		this.selectedElement = element;
 	}
+	
 	public ElementContextExt getSelectedElement(){
 		return this.selectedElement;
 	}

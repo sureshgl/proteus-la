@@ -6,7 +6,6 @@ import com.proteus.framework.app.*;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
-import java.util.List;
 
 public class Field_referenceContextExt extends AbstractBaseExtendedContext{
 
@@ -67,18 +66,31 @@ public class Field_referenceContextExt extends AbstractBaseExtendedContext{
 		return field_variable_listContextExt.getFieldLength();
 	}
 
-	public Long getFieldStart(){
+	public Long getStartIndex(){
 		Field_variable_listContext field_variable_listContext = getLatestContext().field_variable_list();
 		Field_variable_listContextExt field_variable_listContextExt = (Field_variable_listContextExt)extendedContextVisitor.visit(field_variable_listContext);
-		return field_variable_listContextExt.getFieldStart();
+		return field_variable_listContextExt.getStartIndex();
 
 	}
 
 	public Long getEndIndex(){
 		Field_variable_listContext field_variable_listContext = getLatestContext().field_variable_list();
 		Field_variable_listContextExt field_variable_listContextExt = (Field_variable_listContextExt)extendedContextVisitor.visit(field_variable_listContext);
-		return field_variable_listContextExt.getFieldEnd();
+		return field_variable_listContextExt.getEndIndex();
 
+	}
+
+	public Long getMask(Long startIndex, Long endIndex){
+		Long arg1 = -1L;
+		Long arg2 = -1L;
+		if(startIndex < 63)
+		{
+				arg1 = (1L << (startIndex + 1)) -1;
+		}
+		arg2 = arg2<<endIndex;
+		System.out.println(Long.toBinaryString(arg1 & arg2));
+		System.out.println(Long.toBinaryString(~(arg1 & arg2)));
+		return ~(arg1 & arg2);
 	}
 
 	@Override
@@ -87,11 +99,12 @@ public class Field_referenceContextExt extends AbstractBaseExtendedContext{
 		Group_declarationContextExt group_declarationContextExt = getGroup();
 		group_declarationContextExt.setSelectedElement(getElement());
 		Long currLoc = chain_definitionContextExt.getCurrLoc();
-		Long shiftCount  =  getFieldStart() - currLoc;
+		Long shiftCount  =  getStartIndex() - currLoc;
 		if ( shiftCount < 0L ){
 			shiftCount = 64L  + shiftCount;
 		}
 		group_declarationContextExt.setShiftCount(shiftCount);
+		group_declarationContextExt.setMask(getMask(getStartIndex(), getEndIndex()));
 		Long updatedCurrLoc = currLoc + getFieldLength();
 		chain_definitionContextExt.updateCurrLoc(updatedCurrLoc);
 	}

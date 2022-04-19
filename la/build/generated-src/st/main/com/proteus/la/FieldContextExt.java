@@ -9,8 +9,10 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 
 public class FieldContextExt extends AbstractBaseExtendedContext{
 
+	private Long mask;	
 	public FieldContextExt(FieldContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
+		mask = -1L;
 	}
 
 	/*
@@ -63,6 +65,21 @@ public class FieldContextExt extends AbstractBaseExtendedContext{
 	public Long getSize(){
 		assert getStopIndex() > getStartIndex() : "stop index should be greated than start index";
 		return getStopIndex() - getStartIndex() + 1;
+	}
+
+	public Long getMask(){
+		Long arg1 = -1L;
+		Long arg2 = -1L;
+		if(getStartIndex() < 63)
+		{
+				arg1 = (1L << (getStartIndex() + 1)) -1;
+		}
+		arg2 = arg2<<getStopIndex();
+		return ~(arg1 & arg2);
+	}
+
+	public void Initialize() throws Exception{
+		this.mask = getMask();
 	}
 
 }

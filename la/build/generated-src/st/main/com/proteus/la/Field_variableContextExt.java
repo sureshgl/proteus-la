@@ -46,9 +46,17 @@ public class Field_variableContextExt extends AbstractBaseExtendedContext{
 		return getLatestContext().getText().split("\\.")[0];
 	}
 
+	public  Chain_definitionContextExt getChain(){
+		return (Chain_definitionContextExt) getSymbol(getChainName());
+	}
+
 	public String getGroupName(){
 		String[] args = getLatestContext().getText().split("\\.");
 		return args[0] + "." + args[1];
+	}
+
+	public Group_declarationContextExt getGroup(){
+		return (Group_declarationContextExt)getSymbol(getGroupName());
 	}
 
 	public String getElementName(){
@@ -56,8 +64,16 @@ public class Field_variableContextExt extends AbstractBaseExtendedContext{
 		return args[0] + "." + args[1] + "." + args[2];
 	}
 
+	public ElementContextExt getElement(){
+		return (ElementContextExt)getSymbol(getElementName());
+	}
+
 	public String getFieldName(){
 		return getLatestContext().getText();
+	}
+
+	public FieldContextExt getField(){
+		return (FieldContextExt)getSymbol(getFieldName());
 	}
 
 }

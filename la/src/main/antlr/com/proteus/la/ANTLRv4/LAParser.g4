@@ -11,19 +11,39 @@ import com.proteus.la.*;
 
 start
 locals [ StartContextExt extendedContext = null ]
-: group_definition*  chain_definition*  isolate_variable_definition*  EOF 
-|  select_definition*  EOF ;
+: group_definition*  chain_definition*  isolatation_definition*  EOF 
+|  select_definition*  isolate_definition*  EOF ;
 
-isolate_variable_definition
-locals [ Isolate_variable_definitionContextExt extendedContext = null ]
-: isolate_addresses  variable_declaration (  variable_declaration  )+ ;
+isolate_definition
+locals [ Isolate_definitionContextExt extendedContext = null ]
+: isolate  isolate_variable_declaration_list ;
+
+isolate
+locals [ IsolateContextExt extendedContext = null ]
+: ISOLATE ;
+
+isolate_variable_declaration_list
+locals [ Isolate_variable_declaration_listContextExt extendedContext = null ]
+: isolate_variable_declaration (  isolate_variable_declaration  )* ;
+
+isolate_variable_declaration
+locals [ Isolate_variable_declarationContextExt extendedContext = null ]
+: variable  variable_name  field_variable ;
+
+isolatation_definition
+locals [ Isolatation_definitionContextExt extendedContext = null ]
+: isolate_addresses  isolate_variable_address_definition_list ;
+
+isolate_variable_address_definition_list
+locals [ Isolate_variable_address_definition_listContextExt extendedContext = null ]
+: variable_address_definition (  variable_address_definition  )* ;
 
 isolate_addresses
 locals [ Isolate_addressesContextExt extendedContext = null ]
 : ISOLATE_ADDRESSES ;
 
-variable_declaration
-locals [ Variable_declarationContextExt extendedContext = null ]
+variable_address_definition
+locals [ Variable_address_definitionContextExt extendedContext = null ]
 : variable  variable_name  isolate_mask_address  isolate_mask_address_value  value_address  value_address_value  op_address  op_address_value ;
 
 variable
@@ -31,7 +51,7 @@ locals [ VariableContextExt extendedContext = null ]
 : VARIABLE ;
 
 variable_name
-locals [ Variable_nameContextExt extendedContext = null ]
+locals [ Variable_indexContextExt extendedContext = null ]
 : ID ;
 
 isolate_mask_address
@@ -185,7 +205,7 @@ locals [ Field_nameContextExt extendedContext = null ]
 
 field_range
 locals [ Field_rangeContextExt extendedContext = null ]
-: LBRACK  start_index  COLON  stop_index  RBRACK ;
+: LBRACK  stop_index  COLON  start_index  RBRACK ;
 
 start_index
 locals [ Start_indexContextExt extendedContext = null ]

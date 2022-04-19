@@ -61,7 +61,7 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 		processFieldReferences();
 		symanticCheck();
 		GenerateAddresses();
-		ctx.extendedContext.printConfiguration(sb);
+		this.startContext.extendedContext.printConfiguration(sb);
 		System.out.println(sb.toString());
 	}
 }

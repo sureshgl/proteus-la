@@ -94,6 +94,11 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 		group_definitionContextExt.setShiftCount(shiftCount);
 	}
 
+	public void setMask(Long mask)
+	{
+		group_definitionContextExt.setMask(mask);
+	}
+
 	@Override
 	public void printConfiguration(StringBuilder sb){
 		if (group_definitionContextExt.isRefered())
@@ -101,6 +106,7 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 			sb.append("GroupName:" + getGroupName() + "\t");
 			sb.append( "Select Adrr:" + group_definitionContextExt.getSelectedElement().getIndex() + "\t");
 			sb.append( "ShiftCount:" + group_definitionContextExt.getShiftCount() + "\n");
+			sb.append( "Mask:" + group_definitionContextExt.getMask() + "\n");
 		}
 	}
 	

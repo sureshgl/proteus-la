@@ -19,23 +19,6 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 	private Long fieldStart;
 	private Long fieldEnd;
 
-
-	private  Chain_definitionContextExt getChain(String chainName){
-		return (Chain_definitionContextExt) getSymbol(chainName);
-	}
-
-	private Group_declarationContextExt getGroup(String groupName){
-		return (Group_declarationContextExt)getSymbol(groupName);
-	}
-
-	private ElementContextExt getElement(String elementName){
-		return (ElementContextExt)getSymbol(elementName);
-	}
-
-	private FieldContextExt getField(String fieldName){
-		return (FieldContextExt)getSymbol(fieldName);
-	}
-
 	public Field_variable_listContextExt(Field_variable_listContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 		fieldStart = Long.MAX_VALUE;
@@ -87,11 +70,11 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 		return this.fields;
 	}
 
-	public Long getFieldStart(){
+	public Long getStartIndex(){
 		return this.fieldStart;
 	}
 
-	public Long getFieldEnd(){
+	public Long getEndIndex(){
 		return this.fieldEnd;
 	}
 
@@ -114,13 +97,14 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 
 		Field_variableContextExt field_variableContextExt = (Field_variableContextExt)extendedContextVisitor.visit(field_variableContexts.get(0));
 		String chainName = field_variableContextExt.getChainName();
-		this.chain =  getChain(chainName);
+		this.chain = field_variableContextExt.getChain();
+		//this.chain =  getChain(chainName);
 		String groupName = field_variableContextExt.getGroupName();
-		this.group = getGroup(groupName);
+		this.group = field_variableContextExt.getGroup();
 		String elementName = field_variableContextExt.getElementName();
-		this.element = getElement(elementName);
+		this.element = field_variableContextExt.getElement();
 		fieldNames[0] = field_variableContextExt.getFieldName();
-		this.fields.add(getField(fieldNames[0]));
+		this.fields.add(field_variableContextExt.getField());
 
 		for(int i=1; i < field_variableContexts.size(); i++ ){
 			field_variableContextExt = (Field_variableContextExt)extendedContextVisitor.visit(field_variableContexts.get(i));
@@ -134,7 +118,7 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 			for(int k=i-1; k>=0; k--){
 				assert !(fieldNames[k].equals(fieldNames[i])) : "Should not have a field more than once field:" + fieldNames[i];
 			}
-			this.fields.add(getField(fieldNames[i]));
+			this.fields.add(field_variableContextExt.getField());
 		}
 
 		//Set Start & End values of the field collection
@@ -147,87 +131,4 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 			}
 		}
 	}
-
-	// @Override
-	// public void PopulateLAStructs(){
-	// 	List<Field_variableContext> fieldContexts= getLatestContext().field_variable();
-	// 	for(Field_variableContext fieldContext : fieldContexts){
-	// 		Field_variableContext latestFieldContext = fieldContext.extendedContext.getLatestContext();
-	// 		String chainName = latestFieldContext.extendedContext.getChainName();
-	// 		if(LAStructs.chains.get(chainName) == null)	{
-	// 			LAStructs.Chain chain = new LAStructs.Chain();
-	// 			chain.name = chainName;
-	// 			chain.chainContextExt = latestFieldContext.extendedContext.getChain();
-	// 			LAStructs.chains.put(chain.name, chain);
-
-	// 			LAStructs.Group group = new LAStructs.Group();
-	// 			group.name = latestFieldContext.extendedContext.getGroupName();
-	// 			group.groupContextExt = latestFieldContext.extendedContext.getGroup();
-	// 			chain.groups.put(group.name, group);
-
-	// 			LAStructs.Element element = new LAStructs.Element();
-	// 			element.name = latestFieldContext.extendedContext.getElementName();
-	// 			element.elementContextExt = latestFieldContext.extendedContext.getElement();
-	// 			group.elements.put(element.name, element);
-
-	// 			LAStructs.Field field = new LAStructs.Field();
-	// 			field.name = latestFieldContext.extendedContext.getFieldName();
-	// 			field.fieldContextExt = latestFieldContext.extendedContext.getField();
-	// 			element.fields.put(field.name, field);
-	// 		}
-	// 		else{
-	// 			LAStructs.Chain chain = LAStructs.chains.get(chainName);
-	// 			String groupName = latestFieldContext.extendedContext.getGroupName();
-	// 			if(chain.groups.get(groupName) == null)
-	// 			{
-	// 				LAStructs.Group group = new LAStructs.Group();
-	// 				group.name = groupName;
-	// 				group.groupContextExt = latestFieldContext.extendedContext.getGroup();
-	// 				chain.groups.put(group.name, group);
-
-	// 				LAStructs.Element element = new LAStructs.Element();
-	// 				element.name = latestFieldContext.extendedContext.getElementName();
-	// 				element.elementContextExt = latestFieldContext.extendedContext.getElement();
-	// 				group.elements.put(element.name, element);
-
-	// 				LAStructs.Field field = new LAStructs.Field();
-	// 				field.name = latestFieldContext.extendedContext.getFieldName();
-	// 				field.fieldContextExt = latestFieldContext.extendedContext.getField();
-	// 				element.fields.put(field.name, field);
-	// 			}
-	// 			else{
-	// 				LAStructs.Group group = chain.groups.get(groupName);
-	// 				String elementName = latestFieldContext.extendedContext.getElementName();
-	// 				if( group.elements.get(elementName) == null){
-	// 					LAStructs.Element element = new LAStructs.Element();
-	// 					element.name = elementName;
-	// 					element.elementContextExt = latestFieldContext.extendedContext.getElement();
-	// 					group.elements.put(element.name, element);
-	// 					LAStructs.Field field = new LAStructs.Field();
-	// 					field.name = latestFieldContext.extendedContext.getFieldName();
-	// 					field.fieldContextExt = latestFieldContext.extendedContext.getField();
-	// 					element.fields.put(field.name, field);
-	// 				}
-	// 				else{
-	// 					assert group.elements.size() >= 1 : "Cannot have two elements from the same group. Group = "+ groupName + " Element=" + elementName;
-	// 					LAStructs.Element element = group.elements.get(elementName);
-	// 					String fieldName = latestFieldContext.extendedContext.getFieldName();
-	// 					if (element.fields.get(fieldName) == null){
-	// 						LAStructs.Field field = new LAStructs.Field();
-	// 						field.name = latestFieldContext.extendedContext.getFieldName();
-	// 						field.fieldContextExt = latestFieldContext.extendedContext.getField();
-	// 						element.fields.put(field.name, field);
-	// 					}
-	// 					{
-	// 						assert true : "Duplicate field selection fieldName=" + fieldName;
-	// 					}
-	// 				}
-	// 			}
-	// 		}
-	// 	}
-
-	// }
-	
-
-
 }
