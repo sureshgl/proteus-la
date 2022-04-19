@@ -331,6 +331,19 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
+	public void symanticCheck(){
+		ParserRuleContext ctx = getLatestContext();
+		if(ctx != null && ctx.children != null && ctx.children.size()>0){
+			for(ParseTree childCtx : ctx.children){
+				if(!(childCtx instanceof TerminalNode)){
+					if(childCtx.getText().length() >0){
+						getExtendedContext(childCtx).symanticCheck();
+					}
+				}
+			}
+		}
+	}
+
 	public void GenerateAddresses(){
 		ParserRuleContext ctx = getLatestContext();
 		if(ctx != null && ctx.children != null && ctx.children.size()>0){
@@ -338,6 +351,19 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 				if(!(childCtx instanceof TerminalNode)){
 					if(childCtx.getText().length() >0){
 						getExtendedContext(childCtx).GenerateAddresses();
+					}
+				}
+			}
+		}
+	}
+
+	public void printConfiguration(StringBuilder sb){
+		ParserRuleContext ctx = getLatestContext();
+		if(ctx != null && ctx.children != null && ctx.children.size()>0){
+			for(ParseTree childCtx : ctx.children){
+				if(!(childCtx instanceof TerminalNode)){
+					if(childCtx.getText().length() >0){
+						getExtendedContext(childCtx).printConfiguration(sb);
 					}
 				}
 			}

@@ -96,7 +96,13 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 	}
 
 	public Long getFieldLength(){
-		return this.fieldEnd - this.fieldStart + 1;
+		Long length = this.fieldEnd - this.fieldStart + 1;
+		if( length % 4  == 0 ){
+			return length;
+		}
+		else{
+			return ((length>>2)<<2) + 4L;
+		}
 	}
 
 	@Override 
@@ -117,7 +123,7 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 		this.fields.add(getField(fieldNames[0]));
 
 		for(int i=1; i < field_variableContexts.size(); i++ ){
-			field_variableContextExt = (Field_variableContextExt)extendedContextVisitor.visit(field_variableContexts.get(0));
+			field_variableContextExt = (Field_variableContextExt)extendedContextVisitor.visit(field_variableContexts.get(i));
 			String anotherChainName = field_variableContextExt.getChainName();
 			assert anotherChainName.equals(chainName) : "Should not have fileds from diferent chains";
 			String anotherGroupName = field_variableContextExt.getGroupName();
@@ -125,8 +131,8 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 			String anotherElementName = field_variableContextExt.getElementName();
 			assert anotherElementName.equals(elementName) : "Should not have fileds from diferent groups";
 			fieldNames[i] = field_variableContextExt.getFieldName();
-			for(int k=i; k>=0; k--){
-				assert fieldNames[k].equals(i) : "Should not have a field more than once";
+			for(int k=i-1; k>=0; k--){
+				assert !(fieldNames[k].equals(fieldNames[i])) : "Should not have a field more than once field:" + fieldNames[i];
 			}
 			this.fields.add(getField(fieldNames[i]));
 		}

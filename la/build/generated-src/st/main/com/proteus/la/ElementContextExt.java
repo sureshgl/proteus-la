@@ -45,6 +45,11 @@ public class ElementContextExt extends AbstractBaseExtendedContext{
 		}
 	}
 
+	public Long getIndex(){
+		Element_number_indexContext element_number_indexContext = getLatestContext().element_number_index();
+		return element_number_indexContext.extendedContext.getIndex();
+	}
+
 	@Override
 	public void PopulateSymbolTable(SymbolTable symbolTable){
 		super.PopulateSymbolTable(localSymbolTable);

@@ -46,11 +46,15 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 		}
 	}
 
+	private String  getGroupName(){
+		Group_variable_nameContext group_variable_nameContext = getLatestContext().group_variable_name();
+		return group_variable_nameContext.extendedContext.getName();
+	}
+
 	@Override
 	public void PopulateSymbolTable(SymbolTable symbolTable)
-	{
-			Group_variable_nameContext group_variable_nameContext = getLatestContext().group_variable_name();
-			String groupName = group_variable_nameContext.extendedContext.getName();
+	{		
+			String groupName = getGroupName();
 			symbolTable.put(groupName, this);
 	}
 
@@ -66,16 +70,19 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 	}
 
 	@Override
-	public void Initialize(){
+	public void Initialize() throws Exception{
+		super.Initialize();
 		//Keep a copy of Group Definition. 
 		//Every group declaration should have their Group definition.
 		String typeName = getTypeName();
 		Group_definitionContextExt group_definitionContextExt = (Group_definitionContextExt)getSymbol(typeName);
 		assert group_definitionContextExt != null : typeName + "Missing the definition, should be declared before its usage";
-		String groupTypeDefinitionStr = group_definitionContextExt.getLatestContext().getText();
+		String groupTypeDefinitionStr = group_definitionContextExt.getFormattedText();
+		System.out.println(groupTypeDefinitionStr);
 		Group_definitionContext group_definitionContext = (Group_definitionContext)group_definitionContextExt.getContext(groupTypeDefinitionStr);
 		this.group_definitionContextExt = group_definitionContext.extendedContext;
 		this.group_definitionContextExt.PopulateSymbolTable(localSymbolTable);
+		this.group_definitionContextExt.Initialize();
 	}
 
 	public void setSelectedElement(ElementContextExt element)
@@ -85,6 +92,16 @@ public class Group_declarationContextExt extends AbstractBaseExtendedContext{
 
 	public void setShiftCount(Long shiftCount){
 		group_definitionContextExt.setShiftCount(shiftCount);
+	}
+
+	@Override
+	public void printConfiguration(StringBuilder sb){
+		if (group_definitionContextExt.isRefered())
+		{
+			sb.append("GroupName:" + getGroupName() + "\t");
+			sb.append( "Select Adrr:" + group_definitionContextExt.getSelectedElement().getIndex() + "\t");
+			sb.append( "ShiftCount:" + group_definitionContextExt.getShiftCount() + "\n");
+		}
 	}
 	
 }

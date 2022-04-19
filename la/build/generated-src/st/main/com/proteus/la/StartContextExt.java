@@ -11,6 +11,7 @@ public class StartContextExt extends AbstractBaseExtendedContext{
 
 	public StartContextExt(StartContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
+		localSymbolTable = globalSymbolTable;
 	}
 
 	/*
@@ -40,12 +41,6 @@ public class StartContextExt extends AbstractBaseExtendedContext{
 		} else {
 			addToContexts(null);
 		}
-	}
-
-	@Override
-	public void PopulateSymbolTable(SymbolTable symbolTable)
-	{
-		localSymbolTable = symbolTable;	
 	}
 
 }

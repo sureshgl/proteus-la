@@ -26,12 +26,14 @@ public class Runner {
   private String selectFilePath;
   
   
-  public void run() throws FileNotFoundException{
+  public void run() throws Exception{
       File specFile = new File(specFilePath);
+      StartContext startContext;
       if(specFile.exists()){
-        StartContext startContext = laFileParser.getStartContext(specFile);
+        startContext = laFileParser.getStartContext(specFile);
         new LAParserPopulateExtendedContextVisitor().visit(startContext);
-        
+        startContext.extendedContext.PopulateSymbolTable(startContext.extendedContext.globalSymbolTable);
+        startContext.extendedContext.Initialize();
         System.out.println(startContext.extendedContext.getFormattedText());
       }
       else{
@@ -42,6 +44,11 @@ public class Runner {
         Select_definitionContext select_definitionContext = laFileParser.getSelectContext(selectFile);
         new LAParserPopulateExtendedContextVisitor().visit(select_definitionContext);
         System.out.println(select_definitionContext.extendedContext.getFormattedText());
+        select_definitionContext.extendedContext.PopulateSymbolTable(select_definitionContext.extendedContext.globalSymbolTable);
+        select_definitionContext.extendedContext.process(startContext);
+        StringBuilder sb = new StringBuilder();
+        startContext.extendedContext.printConfiguration(sb);
+        System.out.println(sb.toString());
       }
       else{
         throw new FileNotFoundException("Select file " + selectFilePath + "not found");
@@ -87,7 +94,13 @@ public class Runner {
       .addObject(runner)
       .build()
       .parse(myArgs);
-    runner.run();
+    try{
+      runner.run();
+    }
+    catch(Exception ex)
+    {
+      ex.printStackTrace();
+    }
   }
 
 }

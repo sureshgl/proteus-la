@@ -41,4 +41,9 @@ public class Element_number_indexContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	public Long getIndex(){
+		NumberContext numberContext = getLatestContext().number();
+		return numberContext.extendedContext.eval();
+	}
 }

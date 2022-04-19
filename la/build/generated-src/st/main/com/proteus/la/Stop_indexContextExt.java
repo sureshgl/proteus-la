@@ -51,6 +51,7 @@ public class Stop_indexContextExt extends AbstractBaseExtendedContext{
 
 	@Override
 	public void Initialize() throws Exception{
+		super.Initialize();
 		//stop_index = getContext().constant_expression().extendedContext.eval(); //Wrong way of accessing the extended context of a child nodes.
 		stop_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getLatestContext().constant_expression())).eval();
 

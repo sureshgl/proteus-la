@@ -51,6 +51,7 @@ public class Start_indexContextExt extends AbstractBaseExtendedContext{
 	
 	@Override
 	public void Initialize() throws Exception{
+		super.Initialize();
 		//start_index = getContext().constant_expression().extendedContext.eval();
 		start_index = ((Constant_expressionContextExt)extendedContextVisitor.visit(getLatestContext().constant_expression())).eval();
 	}

@@ -9,6 +9,7 @@ import com.proteus.la.ANTLRv4.LAParser.*;
 
 public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 
+	private StartContext startContext = null;
 	public Select_definitionContextExt(Select_definitionContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
 	}
@@ -43,22 +44,24 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 	}
 
 	@Override
-	public void Initialize()throws Exception{
-		super.Initialize();
+	public AbstractBaseExtendedContext lookUp(String symbol){
+		return startContext.extendedContext.lookUp(symbol);
 	}
 
-	public void SelectSymanticCheck(){
 
-	}
 
-	public void process(){
+	public void process(StartContext ctx){
+		this.startContext = ctx;
+		StringBuilder sb = new StringBuilder();
 		try{
 			Initialize();
 		}
 		catch(Exception ex){
 		}
 		processFieldReferences();
-		SelectSymanticCheck();
+		symanticCheck();
 		GenerateAddresses();
+		ctx.extendedContext.printConfiguration(sb);
+		System.out.println(sb.toString());
 	}
 }

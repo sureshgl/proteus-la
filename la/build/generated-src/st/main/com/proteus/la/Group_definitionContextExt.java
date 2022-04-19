@@ -11,6 +11,7 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 
 	private ElementContextExt selectedElement;
 	private Long shiftCount;
+	private Boolean refered = false;
 
 	public Group_definitionContextExt(Group_definitionContext ctx) {
 		super("la", new LAParser(null), new LALexer(null),  ctx, new LAParserExtendedContextVisitor());
@@ -58,14 +59,25 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 			symbolTable.put(key, this);
 	}
 
+	public Boolean isRefered(){
+		return this.refered;
+	}
 	public void setSelectedElement(ElementContextExt element)
 	{
+		this.refered = true;
 		this.selectedElement = element;
+	}
+	public ElementContextExt getSelectedElement(){
+		return this.selectedElement;
 	}
 
 	public void setShiftCount(Long  shiftCount)
 	{
 		this.shiftCount = shiftCount;
+	}
+	
+	public Long getShiftCount(){
+		return this.shiftCount;
 	}
 
 	@Override

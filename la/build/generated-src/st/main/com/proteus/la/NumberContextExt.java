@@ -47,7 +47,7 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 	}
 
 	@Override
-  public void Initialize(){
+  public void Initialize() throws Exception{
 		if( (getLatestContext().Hex_number() != null )&&  (getLatestContext().Hex_number().getText().length()  > 0 )){
 			number = Long.decode(getLatestContext().Hex_number().getText());
 		}
