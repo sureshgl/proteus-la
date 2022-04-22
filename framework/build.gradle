@@ -33,17 +33,11 @@ dependencies {
     implementation 'org.apache.poi:poi:3.7'
 }
 
-task makeDirs{
-    mustRunAfter clean
-    File file = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/framework/ANTLRv4')
-    file.mkdirs()
-}
-
 
 generateGrammarSource {
-    dependsOn makeDirs
     File file = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/framework/ANTLRv4')
     arguments += ['-lib', file.getAbsolutePath(), '-visitor', '-listener']
 }
 
+project.file('build/generated-src/antlr/main/com/proteus/framework/ANTLRv4').mkdirs()
 sourceSets.main.java.srcDirs += ['build/generated-src/antlr/main']
