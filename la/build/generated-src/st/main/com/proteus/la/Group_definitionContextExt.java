@@ -12,6 +12,7 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 	private ElementContextExt selectedElement;
 	private Long shiftCount;
 	private Long mask;
+	private Long shiftedMask;
 	private Boolean refered = false;
 
 	public Group_definitionContextExt(Group_definitionContext ctx) {
@@ -20,6 +21,7 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 		selectedElement = null;
 		shiftCount = -1L;
 		mask = 0L;
+		shiftedMask = 0L;
 	}
 
 	/*
@@ -90,6 +92,15 @@ public class Group_definitionContextExt extends AbstractBaseExtendedContext{
 	
 	public Long getShiftCount(){
 		return this.shiftCount;
+	}
+
+	public void setShiftedMask(Long  shiftedMask)
+	{
+		this.shiftedMask =  shiftedMask;
+	}
+	
+	public Long getShiftedMask(){
+		return this.shiftedMask;
 	}
 
 	@Override

@@ -64,6 +64,7 @@ task AddExtendedContextToParseRule(type: JavaExec) {
 }
 
 task makeDirs{
+    mustRunAfter clean
     File antlrDir = new File(projectDir, 'build/generated-src/antlr/main/com/proteus/la/ANTLRv4')
     antlrDir.mkdirs()
     File extClassesDir = new File(projectDir, 'build/generated-src/st/main/com/proteus/la')

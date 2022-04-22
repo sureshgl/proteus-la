@@ -7,6 +7,10 @@ import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
 import com.proteus.la.ANTLRv4.LAParser.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 
 	public Field_refrence_listContextExt(Field_refrence_listContext ctx) {
@@ -41,4 +45,27 @@ public class Field_refrence_listContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	/*
+		Order the field refernces base on their field sizes
+	*/
+	@Override
+	public void GenerateAddresses(){
+		List<Field_referenceContext> field_referenceContexts =  getLatestContext().field_reference();
+		List<Field_referenceContextExt> field_referenceContextExts = new ArrayList<>();
+		for(Field_referenceContext field_referenceContext : field_referenceContexts){
+			field_referenceContextExts.add(field_referenceContext.extendedContext);
+		}
+		field_referenceContextExts.sort(Comparator.comparing(Field_referenceContextExt::getFieldLength).reversed());
+
+		for(int i=0; i < field_referenceContextExts.size(); i++){
+			logger.info(field_referenceContextExts.get(i).getFormattedText());
+		}
+
+		for(int i=0; i < field_referenceContextExts.size(); i++){
+			field_referenceContextExts.get(i).GenerateAddresses();
+		}
+	}
+
+
 }

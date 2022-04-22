@@ -51,7 +51,7 @@ locals [ VariableContextExt extendedContext = null ]
 : VARIABLE ;
 
 variable_name
-locals [ Variable_indexContextExt extendedContext = null ]
+locals [ Variable_nameContextExt extendedContext = null ]
 : ID ;
 
 isolate_mask_address

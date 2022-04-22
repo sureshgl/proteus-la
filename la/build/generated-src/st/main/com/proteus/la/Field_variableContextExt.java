@@ -76,4 +76,12 @@ public class Field_variableContextExt extends AbstractBaseExtendedContext{
 		return (FieldContextExt)getSymbol(getFieldName());
 	}
 
+	public long getMask(){
+		return getField().getMask();
+	}
+
+	public long getShiftCount(){
+		return getGroup().getShiftCount();
+	}
+
 }

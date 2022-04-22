@@ -44,15 +44,16 @@ public class Field_rangeContextExt extends AbstractBaseExtendedContext{
 		}
 	}
 
-	public Long getFieldStartIndex(){
+	public Long getStartIndex(){
 		return ((Start_indexContextExt)extendedContextVisitor.visit(getLatestContext().start_index())).getIndex();
 	}
 
-	public Long getFieldStopIndex(){
+	public Long getStopIndex(){
 		return ((Stop_indexContextExt)extendedContextVisitor.visit(getLatestContext().stop_index())).getIndex();
 	}
 
 	public Long getSize(){
-		return Math.abs((getFieldStartIndex() - getFieldStopIndex()) + 1 );
+		assert getStopIndex() > getStartIndex() : "stop index should be greated than start index";
+		return getStopIndex() - getStartIndex() + 1 ;
 	}
 }

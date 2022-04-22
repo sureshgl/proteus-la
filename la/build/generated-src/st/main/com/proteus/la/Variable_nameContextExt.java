@@ -41,4 +41,8 @@ public class Variable_nameContextExt extends AbstractBaseExtendedContext{
 			addToContexts(null);
 		}
 	}
+
+	public String getName(){
+		return getLatestContext().getText();
+	}
 }

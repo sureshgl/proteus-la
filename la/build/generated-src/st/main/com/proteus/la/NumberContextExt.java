@@ -48,14 +48,16 @@ public class NumberContextExt extends AbstractBaseExtendedContext{
 
 	@Override
   public void Initialize() throws Exception{
-		if( (getLatestContext().Hex_number() != null )&&  (getLatestContext().Hex_number().getText().length()  > 0 )){
-			number = Long.decode(getLatestContext().Hex_number().getText());
+		if (!initialized) {
+			if( (getLatestContext().Hex_number() != null )&&  (getLatestContext().Hex_number().getText().length()  > 0 )){
+				number = Long.decode(getLatestContext().Hex_number().getText());
+			}
+			else if( (getLatestContext().Unsigned_number() != null) &&  (getLatestContext().Unsigned_number().getText().length()  > 0 ) ){
+				number = Long.decode(getLatestContext().Unsigned_number().getText());
+			}
+			else
+				throw new NumberFormatException(getLatestContext().getText());
 		}
-		else if( (getLatestContext().Unsigned_number() != null) &&  (getLatestContext().Unsigned_number().getText().length()  > 0 ) ){
-			number = Long.decode(getLatestContext().Unsigned_number().getText());
-		}
-		else
-			throw new NumberFormatException(getLatestContext().getText());
 	}
 
 	public Long eval() {

@@ -1,7 +1,6 @@
 package com.proteus.la;
 
 import org.antlr.v4.runtime.ParserRuleContext;
-
 import com.proteus.framework.app.*;
 import com.proteus.la.ANTLRv4.LAParser;
 import com.proteus.la.ANTLRv4.LALexer;
@@ -48,12 +47,11 @@ public class Select_definitionContextExt extends AbstractBaseExtendedContext{
 		return startContext.extendedContext.lookUp(symbol);
 	}
 
-
-
 	public void process(StartContext ctx){
 		this.startContext = ctx;
 		StringBuilder sb = new StringBuilder();
 		try{
+			this.startContext.extendedContext.Initialize();
 			Initialize();
 		}
 		catch(Exception ex){

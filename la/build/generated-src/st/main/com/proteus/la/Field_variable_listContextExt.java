@@ -79,14 +79,10 @@ public class Field_variable_listContextExt extends AbstractBaseExtendedContext{
 	}
 
 	public Long getFieldLength(){
-		Long length = this.fieldEnd - this.fieldStart + 1;
-		if( length % 4  == 0 ){
-			return length;
-		}
-		else{
-			return ((length>>2)<<2) + 4L;
-		}
+		return this.fieldEnd - this.fieldStart + 1;
 	}
+
+
 
 	@Override 
 	public void processFieldReferences(){

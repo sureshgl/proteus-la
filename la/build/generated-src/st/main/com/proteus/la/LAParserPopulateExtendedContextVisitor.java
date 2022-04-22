@@ -12,9 +12,39 @@ public class LAParserPopulateExtendedContextVisitor extends LAParserBaseVisitor<
 		return ctx;
 	}
 	@Override 
-	public ParserRuleContext visitIsolate_variable_definition(LAParser.Isolate_variable_definitionContext ctx) {
-		super.visitIsolate_variable_definition(ctx);
-		ctx.extendedContext = new Isolate_variable_definitionContextExt(ctx);
+	public ParserRuleContext visitIsolate_definition(LAParser.Isolate_definitionContext ctx) {
+		super.visitIsolate_definition(ctx);
+		ctx.extendedContext = new Isolate_definitionContextExt(ctx);
+		return ctx;
+	}
+	@Override 
+	public ParserRuleContext visitIsolate(LAParser.IsolateContext ctx) {
+		super.visitIsolate(ctx);
+		ctx.extendedContext = new IsolateContextExt(ctx);
+		return ctx;
+	}
+	@Override 
+	public ParserRuleContext visitIsolate_variable_declaration_list(LAParser.Isolate_variable_declaration_listContext ctx) {
+		super.visitIsolate_variable_declaration_list(ctx);
+		ctx.extendedContext = new Isolate_variable_declaration_listContextExt(ctx);
+		return ctx;
+	}
+	@Override 
+	public ParserRuleContext visitIsolate_variable_declaration(LAParser.Isolate_variable_declarationContext ctx) {
+		super.visitIsolate_variable_declaration(ctx);
+		ctx.extendedContext = new Isolate_variable_declarationContextExt(ctx);
+		return ctx;
+	}
+	@Override 
+	public ParserRuleContext visitIsolatation_definition(LAParser.Isolatation_definitionContext ctx) {
+		super.visitIsolatation_definition(ctx);
+		ctx.extendedContext = new Isolatation_definitionContextExt(ctx);
+		return ctx;
+	}
+	@Override 
+	public ParserRuleContext visitIsolate_variable_address_definition_list(LAParser.Isolate_variable_address_definition_listContext ctx) {
+		super.visitIsolate_variable_address_definition_list(ctx);
+		ctx.extendedContext = new Isolate_variable_address_definition_listContextExt(ctx);
 		return ctx;
 	}
 	@Override 
@@ -24,9 +54,9 @@ public class LAParserPopulateExtendedContextVisitor extends LAParserBaseVisitor<
 		return ctx;
 	}
 	@Override 
-	public ParserRuleContext visitVariable_declaration(LAParser.Variable_declarationContext ctx) {
-		super.visitVariable_declaration(ctx);
-		ctx.extendedContext = new Variable_declarationContextExt(ctx);
+	public ParserRuleContext visitVariable_address_definition(LAParser.Variable_address_definitionContext ctx) {
+		super.visitVariable_address_definition(ctx);
+		ctx.extendedContext = new Variable_address_definitionContextExt(ctx);
 		return ctx;
 	}
 	@Override 

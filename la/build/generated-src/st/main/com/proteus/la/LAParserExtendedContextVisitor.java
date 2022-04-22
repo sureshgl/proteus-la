@@ -12,16 +12,36 @@ public class LAParserExtendedContextVisitor extends LAParserBaseVisitor<Abstract
 		return ((StartContextExt)ctx.extendedContext).getLatestContext().extendedContext;
 	}
 	@Override 
-	public AbstractBaseExtendedContext visitIsolate_variable_definition(LAParser.Isolate_variable_definitionContext ctx) {
-		return ((Isolate_variable_definitionContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	public AbstractBaseExtendedContext visitIsolate_definition(LAParser.Isolate_definitionContext ctx) {
+		return ((Isolate_definitionContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	}
+	@Override 
+	public AbstractBaseExtendedContext visitIsolate(LAParser.IsolateContext ctx) {
+		return ((IsolateContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	}
+	@Override 
+	public AbstractBaseExtendedContext visitIsolate_variable_declaration_list(LAParser.Isolate_variable_declaration_listContext ctx) {
+		return ((Isolate_variable_declaration_listContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	}
+	@Override 
+	public AbstractBaseExtendedContext visitIsolate_variable_declaration(LAParser.Isolate_variable_declarationContext ctx) {
+		return ((Isolate_variable_declarationContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	}
+	@Override 
+	public AbstractBaseExtendedContext visitIsolatation_definition(LAParser.Isolatation_definitionContext ctx) {
+		return ((Isolatation_definitionContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	}
+	@Override 
+	public AbstractBaseExtendedContext visitIsolate_variable_address_definition_list(LAParser.Isolate_variable_address_definition_listContext ctx) {
+		return ((Isolate_variable_address_definition_listContextExt)ctx.extendedContext).getLatestContext().extendedContext;
 	}
 	@Override 
 	public AbstractBaseExtendedContext visitIsolate_addresses(LAParser.Isolate_addressesContext ctx) {
 		return ((Isolate_addressesContextExt)ctx.extendedContext).getLatestContext().extendedContext;
 	}
 	@Override 
-	public AbstractBaseExtendedContext visitVariable_declaration(LAParser.Variable_declarationContext ctx) {
-		return ((Variable_declarationContextExt)ctx.extendedContext).getLatestContext().extendedContext;
+	public AbstractBaseExtendedContext visitVariable_address_definition(LAParser.Variable_address_definitionContext ctx) {
+		return ((Variable_address_definitionContextExt)ctx.extendedContext).getLatestContext().extendedContext;
 	}
 	@Override 
 	public AbstractBaseExtendedContext visitVariable(LAParser.VariableContext ctx) {

@@ -3,13 +3,11 @@ package com.proteus.la.app;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import com.proteus.framework.app.SymbolTable;
 import com.proteus.la.LAParserPopulateExtendedContextVisitor;
-import com.proteus.la.Select_definitionContextExt;
-import com.proteus.la.StartContextExt;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.proteus.la.ANTLRv4.LAParser.*;
-import com.proteus.la.ANTLRv4.LAParser;
 
 public class Runner {
 
@@ -29,11 +27,11 @@ public class Runner {
   public void run() throws Exception{
       File specFile = new File(specFilePath);
       StartContext startContext;
+      SymbolTable globalSymbolTable = new SymbolTable();
       if(specFile.exists()){
         startContext = laFileParser.getStartContext(specFile);
         new LAParserPopulateExtendedContextVisitor().visit(startContext);
-        startContext.extendedContext.PopulateSymbolTable(startContext.extendedContext.globalSymbolTable);
-        startContext.extendedContext.Initialize();
+        startContext.extendedContext.PopulateSymbolTable(globalSymbolTable);
         System.out.println(startContext.extendedContext.getFormattedText());
       }
       else{
@@ -44,7 +42,9 @@ public class Runner {
         Select_definitionContext select_definitionContext = laFileParser.getSelectContext(selectFile);
         new LAParserPopulateExtendedContextVisitor().visit(select_definitionContext);
         System.out.println(select_definitionContext.extendedContext.getFormattedText());
-        select_definitionContext.extendedContext.PopulateSymbolTable(select_definitionContext.extendedContext.globalSymbolTable);
+        startContext.extendedContext.Initialize();
+        startContext.extendedContext.PopulateSymbolTable(globalSymbolTable);
+        select_definitionContext.extendedContext.PopulateSymbolTable(globalSymbolTable);
         select_definitionContext.extendedContext.process(startContext);
         StringBuilder sb = new StringBuilder();
         startContext.extendedContext.printConfiguration(sb);

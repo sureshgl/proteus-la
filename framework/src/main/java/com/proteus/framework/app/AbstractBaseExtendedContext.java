@@ -25,35 +25,37 @@ import com.proteus.framework.app.IGetFormattedText;
 public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	protected static final Logger logger = LoggerFactory.getLogger(AbstractBaseExtendedContext.class);
 
-
-	//variables
-  protected String grammarName;
+	// variables
+	protected String grammarName;
 	protected Parser parser;
 	protected Lexer lexer;
 	protected ParserRuleContext ctx;
 	/*
-		extendedContextVisitor, always returns the extendedcontext of a latest transformation on that context
-	*/
-	protected IExtendedContextVisitor extendedContextVisitor; //TODO, this can be  a static and can be initialied at app level.
+	 * extendedContextVisitor, always returns the extendedcontext of a latest
+	 * transformation on that context
+	 */
+	protected IExtendedContextVisitor extendedContextVisitor; // TODO, this can be a static and can be initialied at app
+																														// level.
 	protected SymbolTable localSymbolTable;
 
 	/*
-	 *Context store the transformations on that contexts. These contexts list acts as global for all the transformations
+	 * Context store the transformations on that contexts. These contexts list acts
+	 * as global for all the transformations
 	 * on this context. Every transformation should see the same list of contexts.
 	 * This way we are flattening the depth of the transformations.
 	 */
-	private List<ParserRuleContext> contexts;  
-	protected ParserRuleContext parent; //TODO fix the parent logic.
+	private List<ParserRuleContext> contexts;
+	protected ParserRuleContext parent; // TODO fix the parent logic.
 
-	//abstract methods
+	// abstract methods
 	abstract public ParserRuleContext getContext(String str);
+
 	abstract public void setContext(ParserRuleContext ctx);
 
-	public static SymbolTable globalSymbolTable = new SymbolTable(); //Global Symbol table.
-
-	//constructor
-	public AbstractBaseExtendedContext(String grammarName, Parser parser, Lexer lexer, ParserRuleContext ctx, IExtendedContextVisitor extendedContextVisitor){
-    this.grammarName = grammarName;
+	// constructor
+	public AbstractBaseExtendedContext(String grammarName, Parser parser, Lexer lexer, ParserRuleContext ctx,
+			IExtendedContextVisitor extendedContextVisitor) {
+		this.grammarName = grammarName;
 		this.parser = parser;
 		this.lexer = lexer;
 		this.ctx = ctx;
@@ -64,109 +66,113 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		this.localSymbolTable = null;
 	}
 
-	public ParserRuleContext getLatestContext(){
-		if(contexts.size() == 0){
+	public ParserRuleContext getLatestContext() {
+		if (contexts.size() == 0) {
 			return ctx;
-		}
-		else{
-			return contexts.get(contexts.size() -1);
+		} else {
+			return contexts.get(contexts.size() - 1);
 		}
 	}
 
-		// This method is not exposed outside.
-		public Parser getParser(String str) {
-			lexer.setInputStream(new ANTLRInputStream(str));
-			CommonTokenStream tokens = new CommonTokenStream(lexer);
-			parser.setTokenStream(tokens);
-			return parser;
+	// This method is not exposed outside.
+	public Parser getParser(String str) {
+		lexer.setInputStream(new ANTLRInputStream(str));
+		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		parser.setTokenStream(tokens);
+		return parser;
+	}
+
+	protected void addToContexts(ParserRuleContext context) {
+		contexts.add(context);
+
+		AbstractBaseExtendedContext extCtx = getExtendedContext(context);
+		if (extCtx != null) {
+			extCtx.contexts = contexts;
+			extCtx.parent = parent;
 		}
+	}
 
-		protected void addToContexts(ParserRuleContext context) {
-			contexts.add(context);
-			
-			AbstractBaseExtendedContext extCtx = getExtendedContext(context);
-			if (extCtx != null) {
-				extCtx.contexts = contexts;
-				extCtx.parent = parent;
-			}
-		}
-
-
-	public AbstractBaseExtendedContext getExtendedContext(ParseTree context){
-		if(context != null){
-			return (AbstractBaseExtendedContext)extendedContextVisitor.visit(context);
-		} else{
+	public AbstractBaseExtendedContext getExtendedContext(ParseTree context) {
+		if (context != null) {
+			return (AbstractBaseExtendedContext) extendedContextVisitor.visit(context);
+		} else {
 			return null;
 		}
 	}
 
-	protected class Params{
-		public Params( ParserRuleContext ctx, StringBuilder sb)
-		{
+	protected class Params {
+		public Params(ParserRuleContext ctx, StringBuilder sb) {
 			this.context = ctx;
 			beginingOfAlignmentText = 0;
 			input = ctx.start.getInputStream();
 			this.stringBuilder = sb;
 		}
+
 		private ParserRuleContext context;
 		private CharStream input;
 		private StringBuilder stringBuilder;
-		//private int endOfAlignmentText;
+		// private int endOfAlignmentText;
 		private int beginingOfAlignmentText;
 
-		public ParserRuleContext getContext(){
+		public ParserRuleContext getContext() {
 			return this.context;
 		}
-		public void setContext(ParserRuleContext context){
+
+		public void setContext(ParserRuleContext context) {
 			this.context = context;
 		}
-		public CharStream getInput(){
+
+		public CharStream getInput() {
 			return this.input;
 		}
-		public StringBuilder getStringBuilder(){
+
+		public StringBuilder getStringBuilder() {
 			return this.stringBuilder;
 		}
-		public int getBeginingOfAlignmentText(){
+
+		public int getBeginingOfAlignmentText() {
 			return this.beginingOfAlignmentText;
 		}
-		public void setBeginingOfAlignmentText(int value){
+
+		public void setBeginingOfAlignmentText(int value) {
 			this.beginingOfAlignmentText = value;
 		}
 
 		@Override
-		public String toString()
-		{
+		public String toString() {
 			StringBuilder sb = new StringBuilder();
 
-			sb.append("Context = " + context.getClass().getSimpleName() +"\n"+ context.getText()); sb.append("\n");
-			sb.append("Text = "+ stringBuilder.toString()); sb.append("\n");
-			sb.append("start ="+beginingOfAlignmentText); sb.append("\n");
-			//sb.append("end = "+endOfAlignmentText);sb.append("\n");
+			sb.append("Context = " + context.getClass().getSimpleName() + "\n" + context.getText());
+			sb.append("\n");
+			sb.append("Text = " + stringBuilder.toString());
+			sb.append("\n");
+			sb.append("start =" + beginingOfAlignmentText);
+			sb.append("\n");
+			// sb.append("end = "+endOfAlignmentText);sb.append("\n");
 			return sb.toString();
 		}
 
 	}
 
-	//getFormattedText() app
+	// getFormattedText() app
 	@Override
-	public String getFormattedText(){
+	public String getFormattedText() {
 		StringBuilder sb = new StringBuilder();
 		Params params = new Params(getLatestContext(), sb);
 		params.setBeginingOfAlignmentText(getLatestContext().start.getStartIndex());
 		getFormattedText(params);
-		//logger.debug("output =\n" + sb.toString());
+		// logger.debug("output =\n" + sb.toString());
 		return sb.toString();
 	}
 
-	protected void getFormattedText(Params params){
+	protected void getFormattedText(Params params) {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(childCtx instanceof TerminalNode){
-					printTerminalNode((TerminalNode)childCtx,params);
-				}
-				else if(childCtx.getText().length() >0){
-					params.setContext((ParserRuleContext)childCtx);
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (childCtx instanceof TerminalNode) {
+					printTerminalNode((TerminalNode) childCtx, params);
+				} else if (childCtx.getText().length() > 0) {
+					params.setContext((ParserRuleContext) childCtx);
 					Params thisCtxParams = getExtendedContext(childCtx).getUpdatedParams(params);
 					getExtendedContext(childCtx).getFormattedText(thisCtxParams);
 				}
@@ -176,68 +182,66 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 	}
 
 	/*
-	 * check if they are pointing to the same char stream, else it resets the 
+	 * check if they are pointing to the same char stream, else it resets the
 	 * params with the new char stream params.
 	 */
 
 	private Params getUpdatedParams(Params params) {
-		if ( getLatestContext() == null)
-		{
-			//The item is removed during the transformation, hence skip its contents.
-			String alignmentText = params.getInput().getText(new Interval(params.getBeginingOfAlignmentText(), params.getContext().start.getStartIndex()-1));
+		if (getLatestContext() == null) {
+			// The item is removed during the transformation, hence skip its contents.
+			String alignmentText = params.getInput()
+					.getText(new Interval(params.getBeginingOfAlignmentText(), params.getContext().start.getStartIndex() - 1));
 			params.getStringBuilder().append(alignmentText);
-			params.setBeginingOfAlignmentText(params.getContext().stop.getStopIndex() + 1); 
+			params.setBeginingOfAlignmentText(params.getContext().stop.getStopIndex() + 1);
 			return null;
 		}
-		if (getLatestContext().start.getInputStream() != params.getContext().start.getInputStream())
-		{
+		if (getLatestContext().start.getInputStream() != params.getContext().start.getInputStream()) {
 			/*
-			 * advance the  begining of  alignment text, as we are going to consider 'mostRecentContext' in its place.
+			 * advance the begining of alignment text, as we are going to consider
+			 * 'mostRecentContext' in its place.
 			 */
-			if ( params.beginingOfAlignmentText  <  params.getContext().start.getStartIndex())
-			{
-				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignmentText, params.getContext().start.getStartIndex()-1));
+			if (params.beginingOfAlignmentText < params.getContext().start.getStartIndex()) {
+				String alignmentText = params.getInput()
+						.getText(new Interval(params.beginingOfAlignmentText, params.getContext().start.getStartIndex() - 1));
 				params.getStringBuilder().append(alignmentText);
 			}
-			params.setBeginingOfAlignmentText(params.getContext().stop.getStopIndex() + 1); 
-			return new Params(getLatestContext(),params.getStringBuilder());
-		}
-		else
-		{
-			if (getLatestContext().parent == null)
-			{
-				String alignmentText = params.getInput().getText(new Interval(params.beginingOfAlignmentText, params.getContext().start.getInputStream().size()));
+			params.setBeginingOfAlignmentText(params.getContext().stop.getStopIndex() + 1);
+			return new Params(getLatestContext(), params.getStringBuilder());
+		} else {
+			if (getLatestContext().parent == null) {
+				String alignmentText = params.getInput()
+						.getText(new Interval(params.beginingOfAlignmentText, params.getContext().start.getInputStream().size()));
 				params.getStringBuilder().append(alignmentText);
 			}
 			params.setContext(getLatestContext());
 			return params;
 		}
 	}
-	
-  
-  private void printTerminalNode(TerminalNode node,Params params){
+
+	private void printTerminalNode(TerminalNode node, Params params) {
 		CharStream input = params.getContext().start.getInputStream();
-		if(node.getText().equals("<EOF>")){
-			String end = input.getText(new Interval(params.getBeginingOfAlignmentText(),input.size()));
+		if (node.getText().equals("<EOF>")) {
+			String end = input.getText(new Interval(params.getBeginingOfAlignmentText(), input.size()));
 			params.getStringBuilder().append(end);
 		} else {
-			if(params.getBeginingOfAlignmentText() < node.getSymbol().getStartIndex()){
-				Interval alignmentTextInterval = new Interval(params.getBeginingOfAlignmentText(),node.getSymbol().getStartIndex()-1);
+			if (params.getBeginingOfAlignmentText() < node.getSymbol().getStartIndex()) {
+				Interval alignmentTextInterval = new Interval(params.getBeginingOfAlignmentText(),
+						node.getSymbol().getStartIndex() - 1);
 				String alignmentText = input.getText(alignmentTextInterval);
 				params.getStringBuilder().append(alignmentText);
 			}
 			params.getStringBuilder().append(node.getText());
-			params.setBeginingOfAlignmentText(node.getSymbol().getStopIndex()+1);
+			params.setBeginingOfAlignmentText(node.getSymbol().getStopIndex() + 1);
 		}
 	}
 
-	public void PopulateSymbolTable(SymbolTable symbolTable)
-	{
+	public void PopulateSymbolTable(SymbolTable symbolTable) {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
+		getExtendedContext(ctx).localSymbolTable = symbolTable;
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (!(childCtx instanceof TerminalNode)) {
+					if (childCtx.getText().length() > 0) {
 						getExtendedContext(childCtx).PopulateSymbolTable(symbolTable);
 					}
 				}
@@ -245,14 +249,13 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-	//Driver to perform the semantic checks.
-	public void SemanticCheck()
-	{
+	// Driver to perform the semantic checks.
+	public void SemanticCheck() {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (!(childCtx instanceof TerminalNode)) {
+					if (childCtx.getText().length() > 0) {
 						getExtendedContext(childCtx).SemanticCheck();
 					}
 				}
@@ -260,70 +263,69 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
+	protected Boolean initialized = false;
 
-	private Boolean initialized = false;
-	//Use this step to initialize all the data structures in the AST.super.
-	public void Initialize() throws Exception
-	{
-		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
-						getExtendedContext(childCtx).Initialize();
+	// Use this step to initialize all the data structures in the AST.super.
+	public void Initialize() throws Exception {
+		if (!initialized) {
+			ParserRuleContext ctx = getLatestContext();
+			if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+				for (ParseTree childCtx : ctx.children) {
+					if (!(childCtx instanceof TerminalNode)) {
+						if (childCtx.getText().length() > 0) {
+							getExtendedContext(childCtx).Initialize();
+						}
 					}
 				}
 			}
+			initialized = true;
 		}
 	}
 
-	public AbstractBaseExtendedContext lookUp(String symbol){
+	public AbstractBaseExtendedContext lookUp(String symbol) {
 		AbstractBaseExtendedContext symbolExtendedContext = null;
-		if(localSymbolTable != null){
+		if (localSymbolTable != null) {
 			symbolExtendedContext = localSymbolTable.get(symbol);
 		}
-		if( symbolExtendedContext == null){
-			if( parent != null ){
+		if (symbolExtendedContext == null) {
+			if (parent != null) {
 				return extendedContextVisitor.visit(parent).lookUp(symbol);
-			}
-			else{
+			} else {
 				return null;
 			}
-		}
-		else{
+		} else {
 			return symbolExtendedContext;
 		}
 	}
 
-	public AbstractBaseExtendedContext lookIn(String symbol){
+	public AbstractBaseExtendedContext lookIn(String symbol) {
 		return localSymbolTable.get(symbol);
 	}
 
-	//get chain_a.group_b.element_c.field_d -> fieldExtendedcontext of field_d
-	public AbstractBaseExtendedContext getSymbol(String symbol){
-		if(symbol == null || symbol.length() == 0) 
+	// get chain_a.group_b.element_c.field_d -> fieldExtendedcontext of field_d
+	public AbstractBaseExtendedContext getSymbol(String symbol) {
+		if (symbol == null || symbol.length() == 0)
 			return null;
 		AbstractBaseExtendedContext abstractBaseExtendedContext = null;
 		String[] args = symbol.split("\\.");
-		abstractBaseExtendedContext = lookUp(args[0]); //LOOK UP
-		
-		for(int i=1; i<args.length; i++){
-			if(abstractBaseExtendedContext != null){
-				abstractBaseExtendedContext = abstractBaseExtendedContext.lookIn(args[i]);  //LOOK IN
-			}
-			else{
+		abstractBaseExtendedContext = lookUp(args[0]); // LOOK UP
+
+		for (int i = 1; i < args.length; i++) {
+			if (abstractBaseExtendedContext != null) {
+				abstractBaseExtendedContext = abstractBaseExtendedContext.lookIn(args[i]); // LOOK IN
+			} else {
 				return null;
 			}
 		}
 		return abstractBaseExtendedContext;
 	}
 
-	public void processFieldReferences(){
+	public void processFieldReferences() {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (!(childCtx instanceof TerminalNode)) {
+					if (childCtx.getText().length() > 0) {
 						getExtendedContext(childCtx).processFieldReferences();
 					}
 				}
@@ -331,12 +333,12 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-	public void symanticCheck(){
+	public void symanticCheck() {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (!(childCtx instanceof TerminalNode)) {
+					if (childCtx.getText().length() > 0) {
 						getExtendedContext(childCtx).symanticCheck();
 					}
 				}
@@ -344,12 +346,12 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-	public void GenerateAddresses(){
+	public void GenerateAddresses() {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (!(childCtx instanceof TerminalNode)) {
+					if (childCtx.getText().length() > 0) {
 						getExtendedContext(childCtx).GenerateAddresses();
 					}
 				}
@@ -357,12 +359,12 @@ public abstract class AbstractBaseExtendedContext implements IGetFormattedText {
 		}
 	}
 
-	public void printConfiguration(StringBuilder sb){
+	public void printConfiguration(StringBuilder sb) {
 		ParserRuleContext ctx = getLatestContext();
-		if(ctx != null && ctx.children != null && ctx.children.size()>0){
-			for(ParseTree childCtx : ctx.children){
-				if(!(childCtx instanceof TerminalNode)){
-					if(childCtx.getText().length() >0){
+		if (ctx != null && ctx.children != null && ctx.children.size() > 0) {
+			for (ParseTree childCtx : ctx.children) {
+				if (!(childCtx instanceof TerminalNode)) {
+					if (childCtx.getText().length() > 0) {
 						getExtendedContext(childCtx).printConfiguration(sb);
 					}
 				}
